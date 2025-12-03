@@ -43,6 +43,30 @@
                 display: none !important; /* Hide login section for print */
             }
         }
+        /* Style untuk area tanda tangan (DIPERLUKAN UNTUK LAYOUT SAJA) */
+        .signature-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 1.5rem; /* Tambahkan ruang vertikal */
+        }
+        /* Style untuk Nama/Placeholder (TIDAK ADA GARIS/TITIK) */
+        /* Hapus kelas-kelas yang ambigu, biarkan sisa kelas ini hanya untuk jaga-jaga */
+        .signature-display {
+            display: block;
+            text-align: center;
+            font-weight: 600;
+            min-height: 1.5rem; 
+            margin-top: 5px; 
+            width: 80%; /* Batasi lebar agar tidak terlalu panjang */
+        }
+        /* Style untuk placeholder garis (jika nama kosong) */
+        .signature-placeholder {
+            white-space: pre; 
+            font-family: monospace; 
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8 lg:p-10">
@@ -55,6 +79,7 @@
             <p class="text-gray-600 mb-6">Silakan login untuk melanjutkan.</p>
             <div class="mb-4">
                 <label for="username" class="sr-only">Nama Pengguna</label>
+                <!-- PERUBAHAN DI SINI: Placeholder diubah dari "Masukkan nama Anda (gunakan 'FAMI')" menjadi "Masukkan nama Anda" -->
                 <input type="text" id="username" placeholder="Masukkan nama Anda" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg">
             </div>
             <button id="loginBtn" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
@@ -67,6 +92,7 @@
     <!-- Main Application Container (Hidden by default) -->
     <div id="appContainer" class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-lg shadow-xl hidden">
         <div class="flex justify-between items-center mb-8">
+            <!-- Menghapus elemen User ID -->
             <h1 class="text-4xl font-extrabold text-indigo-700 rounded-md p-2 bg-indigo-50">Fami Kuitansi</h1>
             <button id="logoutBtn" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition duration-150 ease-in-out no-print">
                 Logout
@@ -85,13 +111,14 @@
             </ul>
         </nav>
 
+        <!-- Pesan Status Global (menggantikan status Firebase) -->
+        <div id="globalStatusMessage" class="mb-4 hidden p-3 rounded-md font-medium"></div>
+
         <!-- Bagian Formulir Kuitansi -->
         <div id="formSection">
-            <!-- Formulir Kuitansi -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
                     <label for="noKuitansi" class="block text-sm font-medium text-gray-700 mb-1">No. Kuitansi</label>
-                    <!-- Added readonly attribute here -->
                     <input type="text" id="noKuitansi" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
                 </div>
                 <div>
@@ -198,6 +225,9 @@
 
         <div id="reportSection" class="hidden">
             <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 pb-2">Laporan Kuitansi</h2>
+            <!-- Catatan penting untuk pengguna -->
+            <!-- Dihapus sesuai permintaan pengguna. -->
+
 
             <!-- Pengaturan Ukuran Kertas dan Margin -->
             <div class="bg-gray-50 p-4 rounded-md shadow-sm mb-6 no-print">
@@ -243,16 +273,21 @@
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Kuitansi</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Pelanggan</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelanggan</th>
+                            <!-- KOLOM BARU UNTUK TANDA TANGAN PENERIMA -->
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ttd Penerima</th>
+                            <!-- PERBAIKAN NAMA KOLOM UNTUK TANDA TANGAN OLEH -->
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ttd Oleh</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Oleh</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="receiptsReportTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Data kuitansi akan dimasukkan di sini -->
                         </tbody>
                 </table>
             </div>
+            <div id="loadingMessage" class="text-indigo-500 text-center py-8">Memuat data dari Google Sheet...</div>
             <div id="noReceiptsMessage" class="text-gray-500 text-center py-8 hidden">Belum ada kuitansi yang disimpan.</div>
 
             <div id="receiptDetailView" class="hidden p-6 border border-gray-200 rounded-lg shadow-md bg-white">
@@ -323,11 +358,19 @@
                 <div class="grid grid-cols-2 gap-8 text-center mt-8">
                     <div>
                         <p class="font-semibold text-gray-700 mb-6">Tanda Terima</p>
-                        <p id="detailTtdPenerima" class="text-gray-800"></p>
+                        <!-- MENAMBAH TINGGI KOSONG (4rem = 64px) UNTUK TANDA TANGAN -->
+                        <div class="h-16"></div> 
+                        <!-- HANYA TAMPILKAN NAMA YANG DIISI -->
+                        <!-- Diberi kelas font-bold agar lebih menonjol -->
+                        <p id="detailTtdPenerima" class="text-gray-800 font-bold mt-2 border-t border-gray-300 mx-auto w-3/4 pt-1"></p>
                     </div>
                     <div>
                         <p class="font-semibold text-gray-700 mb-6">Hormat Kami</p>
-                        <p id="detailTtdOleh" class="text-gray-800"></p>
+                         <!-- MENAMBAH TINGGI KOSONG (4rem = 64px) UNTUK TANDA TANGAN -->
+                        <div class="h-16"></div>
+                         <!-- HANYA TAMPILKAN NAMA YANG DIISI -->
+                         <!-- Diberi kelas font-bold agar lebih menonjol -->
+                        <p id="detailTtdOleh" class="text-gray-800 font-bold mt-2 border-t border-gray-300 mx-auto w-3/4 pt-1"></p>
                     </div>
                 </div>
 
@@ -347,15 +390,20 @@
     </div>
 
     <script>
-        // Mendapatkan elemen DOM untuk login
+        // *** PENTING: URL DEPLOYMENT APPS SCRIPT ANDA TELAH DITETAPKAN DI SINI ***
+        // URL Apps Script yang baru dihubungkan:
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyt6vD8NEBsNwHOvZAoivpkqHDr8EoXmzjZ_wFwXRnAVvdHhmsb9SZ7yV6_teWUNkxnrg/exec'; 
+        
+        // =========================================================
+        // DOM ELEMENTS & GLOBAL STATE (Unchanged from previous versions)
+        // =========================================================
         const loginSection = document.getElementById('loginSection');
         const usernameInput = document.getElementById('username');
         const loginBtn = document.getElementById('loginBtn');
         const loginMessage = document.getElementById('loginMessage');
         const appContainer = document.getElementById('appContainer');
         const logoutBtn = document.getElementById('logoutBtn');
-
-        // Mendapatkan elemen DOM untuk formulir
+        const globalStatusMessage = document.getElementById('globalStatusMessage'); 
         const noKuitansiInput = document.getElementById('noKuitansi');
         const namaPelangganInput = document.getElementById('namaPelanggan');
         const alamatInput = document.getElementById('alamat');
@@ -364,8 +412,6 @@
         const metodePembayaranRadios = document.querySelectorAll('input[name="metodePembayaran"]');
         const ttdPenerimaInput = document.getElementById('ttdPenerima');
         const ttdOlehSelect = document.getElementById('ttdOleh');
-
-        // Mendapatkan elemen DOM untuk item
         const itemNamaInput = document.getElementById('itemNama');
         const itemDeskripsiInput = document.getElementById('itemDeskripsi');
         const itemJumlahInput = document.getElementById('itemJumlah');
@@ -373,12 +419,8 @@
         const tambahItemBtn = document.getElementById('tambahItemBtn');
         const itemTableBody = document.getElementById('itemTableBody');
         const grandTotalElement = document.getElementById('grandTotal');
-
-        // Mendapatkan elemen DOM untuk tombol aksi
         const resetFormBtn = document.getElementById('resetFormBtn');
-        const saveKuitansiBtn = document.getElementById('saveKuitansiBtn'); // Tombol "Simpan"
-
-        // Mendapatkan elemen DOM untuk navigasi dan bagian
+        const saveKuitansiBtn = document.getElementById('saveKuitansiBtn'); 
         const navForm = document.getElementById('navForm');
         const navReport = document.getElementById('navReport');
         const formSection = document.getElementById('formSection');
@@ -387,8 +429,6 @@
         const receiptsReportTableBody = document.getElementById('receiptsReportTableBody');
         const noReceiptsMessage = document.getElementById('noReceiptsMessage');
         const receiptDetailView = document.getElementById('receiptDetailView');
-
-        // Mendapatkan elemen DOM untuk detail kuitansi
         const detailNoKuitansi = document.getElementById('detailNoKuitansi');
         const detailTanggal = document.getElementById('detailTanggal');
         const detailNamaPelanggan = document.getElementById('detailNamaPelanggan');
@@ -398,17 +438,17 @@
         const detailItemTableBody = document.getElementById('detailItemTableBody');
         const detailSubtotal = document.getElementById('detailSubtotal');
         const detailGrandTotal = document.getElementById('detailGrandTotal');
+        // Mendapatkan elemen kontainer dan elemen teks untuk TTD
         const detailTtdPenerima = document.getElementById('detailTtdPenerima');
         const detailTtdOleh = document.getElementById('detailTtdOleh');
-        const downloadPdfBtn = document.getElementById('downloadPdfBtn'); // Tombol Unduh PDF
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn'); 
         const backToReportListBtn = document.getElementById('backToReportListBtn');
-
-        // Elemen pengaturan PDF baru
         const paperSizeSelect = document.getElementById('paperSize');
         const marginTopInput = document.getElementById('marginTop');
         const marginRightInput = document.getElementById('marginRight');
         const marginBottomInput = document.getElementById('marginBottom');
         const marginLeftInput = document.getElementById('marginLeft');
+        const loadingMessage = document.getElementById('loadingMessage');
 
         // Definisi ukuran kertas dalam mm
         const paperSizes = {
@@ -418,22 +458,120 @@
             Legal: { width: 215.9, height: 355.6 }
         };
 
-
+        // Global State
         let currentItems = []; // Array untuk menyimpan data item kuitansi yang sedang dibuat
-        let savedReceipts = []; // Array untuk menyimpan semua kuitansi yang telah disimpan
-        let editingReceiptId = null; // Menyimpan ID kuitansi yang sedang diedit, null jika membuat baru
+        let savedReceipts = []; // Array untuk menyimpan semua kuitansi yang telah dimuat dari Sheet
+        let editingReceiptId = null; // Menyimpan ID kuitansi yang sedang diedit (timestamp)
+        let receiptSequence = { number: 0, year: new Date().getFullYear() }; // Nomor urut (dilakukan secara lokal)
 
+        // =========================================================
+        // GOOGLE SHEET INTERACTION (Menggunakan Fetch)
+        // =========================================================
+
+        /**
+         * Mengirim permintaan ke Apps Script endpoint.
+         * Mode: Menggunakan 'cors' (default) dan menghapus header Content-Type agar fetch lebih sederhana.
+         */
+        async function fetchAppsScript(action, payload = {}) {
+            // Menggunakan URL yang baru diperbarui
+            if (APPS_SCRIPT_URL.includes('PASTIKAN_URL_DEPLOYMENT_DI_SINI')) {
+                showStatusMessage('ERROR: Harap ganti variabel APPS_SCRIPT_URL dengan URL deployment Apps Script Anda.', 'error');
+                return { status: 'error', message: 'URL Apps Script belum diatur.' };
+            }
+
+            try {
+                // Perubahan: Menghapus header Content-Type yang eksplisit untuk mencoba mengatasi masalah CORS/Fetch.
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: action,
+                        ...payload
+                    }),
+                    // mode: 'cors' (default)
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error("HTTP Error Detail:", errorText);
+                    throw new Error(`HTTP Error Status: ${response.status}. Mohon periksa log Apps Script Anda.`);
+                }
+                
+                // Pastikan Apps Script mengembalikan respons JSON
+                const responseJson = await response.json(); 
+                if (responseJson.status === 'error' && action === 'get') {
+                    throw new Error(responseJson.message);
+                }
+
+                return responseJson; 
+
+            } catch (error) {
+                console.error(`Error during ${action} operation:`, error);
+                
+                // Menangani TypeError: Failed to fetch (masalah jaringan/CORS yang keras)
+                if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+                    return { 
+                        status: 'error', 
+                        message: 'Gagal menghubungi Google Apps Script. Cek koneksi, atau pastikan URL sudah benar dan Apps Script di-deploy dengan akses "Anyone".' 
+                    };
+                }
+                
+                // Menangani error lainnya (termasuk HTTP errors atau error dari Apps Script JSON)
+                return { status: 'error', message: `Kesalahan: ${error.message}` };
+            }
+        }
+        
+        /**
+         * Mengirim permintaan GET untuk memuat data dari Sheet.
+         */
+        async function loadReceipts() {
+            loadingMessage.classList.remove('hidden');
+            
+            const result = await fetchAppsScript('get');
+
+            if (result.status === 'success') {
+                // Simpan data kuitansi yang dimuat
+                savedReceipts = result.data || [];
+                
+                // Hitung nomor urut kuitansi lokal berdasarkan data yang dimuat
+                let maxNum = 0;
+                savedReceipts.forEach(receipt => {
+                    const parts = receipt.noKuitansi.split('-');
+                    const year = parseInt(parts[2]);
+                    const num = parseInt(parts[1]);
+                    
+                    // Hanya hitung nomor urut tahun ini
+                    if (year === new Date().getFullYear() && num > maxNum) {
+                        maxNum = num;
+                    }
+                });
+
+                // Perbarui state lokal nomor urut
+                receiptSequence = { number: maxNum, year: new Date().getFullYear() };
+                resetForm(); // Perbarui nomor kuitansi di formulir
+                
+            } else {
+                showStatusMessage(`Gagal memuat data: ${result.message}`, 'error');
+            }
+            
+            loadingMessage.classList.add('hidden');
+        }
+
+
+        // =========================================================
+        // UTILITY FUNCTIONS (Modifikasi untuk integrasi Apps Script)
+        // =========================================================
+        
         // Fungsi untuk menghasilkan nomor kuitansi otomatis (FM-0001-YYYY, FM-0002-YYYY, dst.)
         function generateReceiptNumber() {
-            const sequenceData = JSON.parse(localStorage.getItem('receiptSequence') || '{}');
             const currentYear = new Date().getFullYear();
-            let lastNum = sequenceData.number || 0;
-            let lastYear = sequenceData.year || currentYear;
+            let lastNum = receiptSequence.number || 0;
+            let lastYear = receiptSequence.year || currentYear;
 
             // Jika tahun terakhir yang disimpan berbeda dengan tahun saat ini, reset nomor urut
             if (lastYear !== currentYear) {
                 lastNum = 0;
-                lastYear = currentYear;
+                // Kami tidak perlu memperbarui state lokal di sini, hanya menghitung 
+                // nomor berikutnya. State lokal akan diperbarui saat loadReceipts berikutnya.
             }
             
             // Nomor yang ditampilkan adalah nomor berikutnya (lastNum + 1)
@@ -441,15 +579,99 @@
             return `FM-${formattedNum}-${currentYear}`;
         }
 
-        // Fungsi untuk memperbarui nomor kuitansi terakhir di localStorage
-        // Fungsi ini akan dipanggil saat kuitansi baru berhasil disimpan
-        function updateReceiptSequence(newNumber) {
-            const currentYear = new Date().getFullYear();
-            // Ambil hanya bagian angka dari nomor kuitansi (misal: "FM-0001-2025" -> "0001")
-            const numPart = newNumber.split('-')[1];
-            if (numPart) {
-                localStorage.setItem('receiptSequence', JSON.stringify({ number: parseInt(numPart), year: currentYear }));
+        // Fungsi untuk menyimpan atau memperbarui kuitansi ke Google Sheet
+        async function saveKuitansi() {
+            const noKuitansi = noKuitansiInput.value.trim();
+            const namaPelanggan = namaPelangganInput.value.trim();
+            const alamat = alamatInput.value.trim();
+            const tanggal = tanggalInput.value;
+            const noHP = noHPInput.value.trim();
+            const metodePembayaran = document.querySelector('input[name="metodePembayaran"]:checked').value;
+            const ttdPenerima = ttdPenerimaInput.value.trim();
+            const ttdOleh = ttdOlehSelect.value;
+            const grandTotalText = grandTotalElement.textContent.replace('Rp ', '').replace(/\./g, '').replace(',', '.');
+            const grandTotal = parseFloat(grandTotalText); 
+
+            if (!noKuitansi || !namaPelanggan || !tanggal || currentItems.length === 0 || isNaN(grandTotal)) {
+                showStatusMessage('Harap lengkapi No. Kuitansi, Nama Pelanggan, Tanggal, dan tambahkan setidaknya satu item sebelum menyimpan.', 'error');
+                return;
             }
+
+            const receiptId = editingReceiptId || Date.now();
+            
+            const receiptData = {
+                id: receiptId,
+                noKuitansi,
+                namaPelanggan,
+                alamat,
+                tanggal,
+                noHP,
+                metodePembayaran,
+                ttdPenerima,
+                ttdOleh,
+                items: JSON.parse(JSON.stringify(currentItems)), 
+                grandTotal: grandTotal,
+                timestamp: receiptId 
+            };
+            
+            showStatusMessage(editingReceiptId ? 'Memperbarui kuitansi...' : 'Menyimpan kuitansi...', 'info');
+
+            const result = await fetchAppsScript('save', { receiptData });
+
+            if (result.status === 'success') {
+                showStatusMessage(editingReceiptId ? 'Kuitansi berhasil diperbarui di Google Sheet!' : 'Kuitansi berhasil disimpan di Google Sheet!', 'success');
+                resetForm(); 
+                
+                // Perbarui savedReceipts dengan data terbaru dari respons Apps Script
+                savedReceipts = result.data || [];
+                
+                // Muat ulang nomor urut untuk mendapatkan yang terbaru
+                await loadReceipts(); 
+                showReportSection();
+            } else {
+                showStatusMessage(`Gagal menyimpan: ${result.message}`, 'error');
+            }
+        }
+
+        // Fungsi untuk menghapus kuitansi yang disimpan dari Google Sheet
+        async function deleteSavedReceipt(receiptId) {
+             showStatusMessage('Menghapus kuitansi...', 'info');
+             const result = await fetchAppsScript('delete', { id: receiptId });
+
+             if (result.status === 'success') {
+                showStatusMessage('Kuitansi berhasil dihapus dari Google Sheet!', 'success');
+                
+                // Perbarui savedReceipts dengan data terbaru dari respons Apps Script
+                savedReceipts = result.data || [];
+                
+                // Muat ulang nomor urut untuk mendapatkan yang terbaru
+                await loadReceipts(); 
+                renderSavedReceipts();
+            } else {
+                showStatusMessage(`Gagal menghapus: ${result.message}`, 'error');
+            }
+        }
+        
+        // =========================================================
+        // UI AND RENDERING LOGIC (Dipertahankan dan Diperbarui)
+        // =========================================================
+        
+        function showStatusMessage(message, type = 'success') {
+            globalStatusMessage.textContent = message;
+            globalStatusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-blue-100', 'text-blue-700');
+            
+            if (type === 'error') {
+                globalStatusMessage.classList.add('bg-red-100', 'text-red-700');
+            } else if (type === 'info') {
+                 globalStatusMessage.classList.add('bg-blue-100', 'text-blue-700');
+            } else {
+                globalStatusMessage.classList.add('bg-green-100', 'text-green-700');
+            }
+
+            // Remove message after 5 seconds
+            setTimeout(() => {
+                globalStatusMessage.classList.add('hidden');
+            }, 5000);
         }
 
         // Fungsi untuk menambahkan item ke tabel
@@ -459,28 +681,15 @@
             const jumlah = parseInt(itemJumlahInput.value);
             const hargaSatuan = parseFloat(itemHargaSatuanInput.value);
 
-            // Validasi input
             if (!nama || isNaN(jumlah) || jumlah <= 0 || isNaN(hargaSatuan) || hargaSatuan < 0) {
-                const messageBox = document.createElement('div');
-                messageBox.textContent = 'Harap isi semua kolom item dengan benar (Nama, Jumlah > 0, Harga Satuan >= 0).';
-                messageBox.classList.add('bg-red-100', 'border', 'border-red-400', 'text-red-700', 'px-4', 'py-3', 'rounded', 'relative', 'mb-4');
-                messageBox.setAttribute('role', 'alert');
-                
-                tambahItemBtn.parentNode.insertBefore(messageBox, tambahItemBtn);
-
-                setTimeout(() => {
-                    messageBox.remove();
-                }, 3000);
+                showStatusMessage('Harap isi semua kolom item dengan benar (Nama, Jumlah > 0, Harga Satuan >= 0).', 'error');
                 return;
             }
 
             const total = jumlah * hargaSatuan;
-
             currentItems.push({ nama, deskripsi, jumlah, hargaSatuan, total });
-
             renderCurrentItems();
 
-            // Reset input item
             itemNamaInput.value = '';
             itemDeskripsiInput.value = '';
             itemJumlahInput.value = '1';
@@ -537,113 +746,48 @@
 
         // Fungsi untuk mereset seluruh formulir
         function resetForm() {
-            noKuitansiInput.value = generateReceiptNumber(); // Automatically generate receipt number
+            noKuitansiInput.value = generateReceiptNumber(); 
             namaPelangganInput.value = '';
             alamatInput.value = '';
             tanggalInput.value = '';
             noHPInput.value = '';
-            document.getElementById('tunai').checked = true; // Set default pembayaran ke Tunai
+            document.getElementById('tunai').checked = true; 
             ttdPenerimaInput.value = '';
-            ttdOlehSelect.value = 'Fauzi'; // Set default penandatangan ke Fauzi
+            ttdOlehSelect.value = 'Fauzi'; 
 
-            currentItems = []; // Kosongkan item yang sedang dibuat
-            renderCurrentItems(); // Render ulang tabel item
+            currentItems = []; 
+            renderCurrentItems(); 
             
-            // Set tanggal hari ini setelah reset
             const today = new Date();
             const year = today.getFullYear();
             const month = String(today.getMonth() + 1).padStart(2, '0');
             const day = String(today.getDate()).padStart(2, '0');
             tanggalInput.value = `${year}-${month}-${day}`;
 
-            editingReceiptId = null; // Reset ID kuitansi yang sedang diedit
-            saveKuitansiBtn.textContent = 'Simpan Kuitansi'; // Kembalikan teks tombol ke "Simpan Kuitansi"
+            editingReceiptId = null; 
+            saveKuitansiBtn.textContent = 'Simpan Kuitansi'; 
             saveKuitansiBtn.classList.remove('bg-yellow-600', 'hover:bg-yellow-700', 'focus:ring-yellow-500');
             saveKuitansiBtn.classList.add('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-500');
         }
 
-        // Fungsi untuk menyimpan atau memperbarui kuitansi
-        function saveKuitansi() {
-            const noKuitansi = noKuitansiInput.value.trim();
-            const namaPelanggan = namaPelangganInput.value.trim();
-            const alamat = alamatInput.value.trim();
-            const tanggal = tanggalInput.value;
-            const noHP = noHPInput.value.trim();
-            const metodePembayaran = document.querySelector('input[name="metodePembayaran"]:checked').value;
-            const ttdPenerima = ttdPenerimaInput.value.trim();
-            const ttdOleh = ttdOlehSelect.value;
-            const grandTotal = parseFloat(grandTotalElement.textContent.replace('Rp ', '').replace(/\./g, '').replace(',', '.')); // Parse total dari teks
-
-            // Validasi minimal untuk kuitansi
-            if (!noKuitansi || !namaPelanggan || !tanggal || currentItems.length === 0) {
-                const messageBox = document.createElement('div');
-                messageBox.textContent = 'Harap lengkapi No. Kuitansi, Nama Pelanggan, Tanggal, dan tambahkan setidaknya satu item sebelum menyimpan.';
-                messageBox.classList.add('bg-red-100', 'border', 'border-red-400', 'text-red-700', 'px-4', 'py-3', 'rounded', 'relative', 'mb-4');
-                messageBox.setAttribute('role', 'alert');
-                
-                saveKuitansiBtn.parentNode.insertBefore(messageBox, saveKuitansiBtn);
-
-                setTimeout(() => {
-                    messageBox.remove();
-                }, 5000);
-                return;
-            }
-
-            const receiptData = {
-                noKuitansi,
-                namaPelanggan,
-                alamat,
-                tanggal,
-                noHP,
-                metodePembayaran,
-                ttdPenerima,
-                ttdOleh,
-                items: JSON.parse(JSON.stringify(currentItems)), // Salin array items agar tidak berubah
-                grandTotal
-            };
-
-            if (editingReceiptId) {
-                // Perbarui kuitansi yang sudah ada
-                const index = savedReceipts.findIndex(r => r.id === editingReceiptId);
-                if (index !== -1) {
-                    savedReceipts[index] = { ...receiptData, id: editingReceiptId }; // Pertahankan ID asli
-                }
-                const successBox = document.createElement('div');
-                successBox.textContent = 'Kuitansi berhasil diperbarui!';
-                successBox.classList.add('bg-green-100', 'border', 'border-green-400', 'text-green-700', 'px-4', 'py-3', 'rounded', 'relative', 'mb-4');
-                successBox.setAttribute('role', 'alert');
-                navForm.parentNode.insertBefore(successBox, navForm);
-                setTimeout(() => {
-                    successBox.remove();
-                }, 3000);
-            } else {
-                // Simpan kuitansi baru
-                receiptData.id = Date.now(); // ID unik untuk setiap kuitansi baru
-                savedReceipts.push(receiptData);
-                updateReceiptSequence(noKuitansi); // Perbarui nomor urut di localStorage
-                const successBox = document.createElement('div');
-                successBox.textContent = 'Kuitansi berhasil disimpan!';
-                successBox.classList.add('bg-green-100', 'border', 'border-green-400', 'text-green-700', 'px-4', 'py-3', 'rounded', 'relative', 'mb-4');
-                successBox.setAttribute('role', 'alert');
-                navForm.parentNode.insertBefore(successBox, navForm);
-                setTimeout(() => {
-                    successBox.remove();
-                }, 3000);
-            }
-            
-            renderSavedReceipts(); // Render ulang laporan kuitansi
-            resetForm(); // Kosongkan formulir setelah disimpan/diperbarui
-            showReportSection(); // Pindah ke laporan setelah menyimpan/memperbarui
-        }
-
         // Fungsi untuk merender (menampilkan) kuitansi yang disimpan di bagian laporan
         function renderSavedReceipts() {
-            receiptsReportTableBody.innerHTML = ''; // Kosongkan isi tabel laporan
+            receiptsReportTableBody.innerHTML = ''; 
+            
             if (savedReceipts.length === 0) {
                 noReceiptsMessage.classList.remove('hidden');
             } else {
                 noReceiptsMessage.classList.add('hidden');
-                savedReceipts.forEach((receipt, index) => {
+                
+                // --- START DEBUG LOGGING ---
+                // LOG KRUSIAL: Menampilkan data mentah yang diterima dari Apps Script
+                console.log('Data Kuitansi yang Dimuat (Debug TTD):', savedReceipts);
+                // --- END DEBUG LOGGING ---
+
+                // Sort the array by ID/timestamp (most recent first)
+                const sortedReceipts = [...savedReceipts].sort((a, b) => b.id - a.id);
+
+                sortedReceipts.forEach((receipt, index) => {
                     const row = receiptsReportTableBody.insertRow();
                     row.classList.add('hover:bg-gray-100');
 
@@ -658,14 +802,27 @@
                     cell = row.insertCell();
                     cell.classList.add('px-6', 'py-4', 'whitespace-nowrap', 'text-sm', 'text-gray-500');
                     cell.textContent = receipt.namaPelanggan;
+                    
+                    // --- LOGIKA PERBAIKAN TTD DI TABEL LAPORAN ---
+                    // Membersihkan string secara agresif (menghilangkan semua spasi dan karakter non-print)
+                    const penerimaNameClean = String(receipt.ttdPenerima || '').replace(/\s+/g, ' ').trim();
+                    const olehNameClean = String(receipt.ttdOleh || '').replace(/\s+/g, ' ').trim();
 
+                    // KOLOM BARU: Ttd Penerima
+                    cell = row.insertCell();
+                    cell.classList.add('px-6', 'py-4', 'whitespace-nowrap', 'text-sm', 'text-gray-500');
+                    cell.textContent = penerimaNameClean || '-'; 
+
+                    // KOLOM Ttd Oleh (dipindahkan posisinya)
+                    cell = row.insertCell();
+                    cell.classList.add('px-6', 'py-4', 'whitespace-nowrap', 'text-sm', 'text-gray-500');
+                    cell.textContent = olehNameClean || '-'; 
+                    // --- END LOGIKA PERBAIKAN TTD DI TABEL LAPORAN ---
+
+                    // KOLOM Total (dipindahkan posisinya)
                     cell = row.insertCell();
                     cell.classList.add('px-6', 'py-4', 'whitespace-nowrap', 'text-sm', 'text-gray-900', 'font-semibold');
                     cell.textContent = `Rp ${receipt.grandTotal.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-                    cell = row.insertCell();
-                    cell.classList.add('px-6', 'py-4', 'whitespace-nowrap', 'text-sm', 'text-gray-500');
-                    cell.textContent = receipt.ttdOleh;
 
                     cell = row.insertCell();
                     cell.classList.add('px-6', 'py-4', 'whitespace-nowrap', 'text-right', 'text-sm', 'font-medium');
@@ -688,14 +845,14 @@
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'Hapus';
                     deleteButton.classList.add('text-red-600', 'hover:text-red-900', 'font-bold', 'py-2', 'px-4', 'rounded-md', 'transition', 'duration-150', 'ease-in-out');
-                    deleteButton.onclick = () => showConfirmDeleteModal(index); // Menggunakan modal konfirmasi kustom
+                    deleteButton.onclick = () => showConfirmDeleteModal(receipt.id); 
                     cell.appendChild(deleteButton);
                 });
             }
         }
 
         // Fungsi untuk menampilkan modal konfirmasi hapus
-        function showConfirmDeleteModal(index) {
+        function showConfirmDeleteModal(receiptId) {
             const modal = document.createElement('div');
             modal.classList.add('fixed', 'inset-0', 'bg-gray-800', 'bg-opacity-75', 'flex', 'items-center', 'justify-center', 'z-50');
             modal.innerHTML = `
@@ -712,30 +869,15 @@
 
             document.getElementById('cancelDeleteBtn').onclick = () => modal.remove();
             document.getElementById('confirmDeleteBtn').onclick = () => {
-                deleteSavedReceipt(index);
+                deleteSavedReceipt(receiptId);
                 modal.remove();
             };
         }
 
-        // Fungsi untuk menghapus kuitansi yang disimpan
-        function deleteSavedReceipt(index) {
-            savedReceipts.splice(index, 1);
-            renderSavedReceipts();
-            const successBox = document.createElement('div');
-            successBox.textContent = 'Kuitansi berhasil dihapus!';
-            successBox.classList.add('bg-green-100', 'border', 'border-green-400', 'text-green-700', 'px-4', 'py-3', 'rounded', 'relative', 'mb-4');
-            successBox.setAttribute('role', 'alert');
-            navForm.parentNode.insertBefore(successBox, navForm);
-            setTimeout(() => {
-                successBox.remove();
-            }, 3000);
-        }
-
         // Fungsi untuk mengedit kuitansi
         function editReceipt(receipt) {
-            editingReceiptId = receipt.id; // Set ID kuitansi yang sedang diedit
+            editingReceiptId = receipt.id; 
 
-            // Isi formulir dengan data kuitansi
             noKuitansiInput.value = receipt.noKuitansi;
             namaPelangganInput.value = receipt.namaPelanggan;
             alamatInput.value = receipt.alamat;
@@ -749,43 +891,58 @@
             ttdPenerimaInput.value = receipt.ttdPenerima;
             ttdOlehSelect.value = receipt.ttdOleh;
 
-            // Isi item
-            currentItems = JSON.parse(JSON.stringify(receipt.items)); // Salin item
+            currentItems = JSON.parse(JSON.stringify(receipt.items)); 
             renderCurrentItems();
 
-            // Ubah teks tombol simpan
             saveKuitansiBtn.textContent = 'Perbarui Kuitansi';
             saveKuitansiBtn.classList.remove('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-500');
             saveKuitansiBtn.classList.add('bg-yellow-600', 'hover:bg-yellow-700', 'focus:ring-yellow-500');
 
-            showFormSection(); // Pindah ke bagian formulir
+            showFormSection(); 
         }
 
         // Fungsi untuk melihat detail kuitansi
         function viewReceiptDetail(receipt) {
-            // Sembunyikan daftar kuitansi
             receiptsReportTableContainer.classList.add('hidden');
             noReceiptsMessage.classList.add('hidden');
-            // Tampilkan detail kuitansi
             receiptDetailView.classList.remove('hidden');
 
-            // Isi data kuitansi ke elemen detail
             detailNoKuitansi.textContent = receipt.noKuitansi;
             detailTanggal.textContent = receipt.tanggal;
             detailNamaPelanggan.textContent = receipt.namaPelanggan;
-            detailAlamat.textContent = receipt.alamat || '-'; // Handle empty address
-            detailNoHP.textContent = receipt.noHP || '-'; // Handle empty phone
+            detailAlamat.textContent = receipt.alamat || '-'; 
+            detailNoHP.textContent = receipt.noHP || '-'; 
             detailMetodePembayaran.textContent = receipt.metodePembayaran;
             detailGrandTotal.textContent = `Rp ${receipt.grandTotal.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            detailSubtotal.textContent = `Rp ${receipt.grandTotal.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; // Subtotal sama dengan grand total jika tidak ada diskon/pajak
-            detailTtdPenerima.textContent = receipt.ttdPenerima || '....................................';
-            detailTtdOleh.textContent = receipt.ttdOleh;
+            detailSubtotal.textContent = `Rp ${receipt.grandTotal.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; 
+            
+            // --- LOGIKA PERBAIKAN TANDA TANGAN DETAIL VIEW ---
+            // Membersihkan string secara agresif (menghilangkan semua spasi dan karakter non-print)
+            const penerimaNameClean = String(receipt.ttdPenerima || '').replace(/\s+/g, ' ').trim();
+            const olehNameClean = String(receipt.ttdOleh || '').replace(/\s+/g, ' ').trim();
 
-            // Isi tabel item detail
+            // TANDA TERIMA
+            // Tampilkan nama atau string kosong jika datanya null, undefined, atau string kosong
+            if (penerimaNameClean !== '' && penerimaNameClean.toLowerCase() !== 'null') { 
+                detailTtdPenerima.textContent = penerimaNameClean; 
+            } else {
+                detailTtdPenerima.textContent = ''; // Kosong jika tidak ada nama
+            }
+            
+            // HORMAT KAMI
+            // Tampilkan nama atau string kosong jika datanya null, undefined, atau string kosong
+            if (olehNameClean !== '' && olehNameClean.toLowerCase() !== 'null') { 
+                detailTtdOleh.textContent = olehNameClean; 
+            } else {
+                detailTtdOleh.textContent = ''; // Kosong jika tidak ada nama
+            }
+            // --- END LOGIKA PERBAIKAN TANDA TANGAN DETAIL VIEW ---
+
+
             detailItemTableBody.innerHTML = '';
             receipt.items.forEach(item => {
                 const row = detailItemTableBody.insertRow();
-                row.classList.add('hover:bg-gray-50'); // Slight hover effect
+                row.classList.add('hover:bg-gray-50'); 
                 
                 let cell = row.insertCell();
                 cell.classList.add('px-6', 'py-2', 'whitespace-nowrap', 'text-sm', 'text-gray-800');
@@ -810,27 +967,25 @@
             const { jsPDF } = window.jspdf;
             const element = document.getElementById('receiptDetailView');
 
-            // Sembunyikan tombol-tombol yang tidak perlu di PDF
             const buttonsToHide = element.querySelectorAll('.no-print');
             buttonsToHide.forEach(btn => btn.style.display = 'none');
 
-            // Tambahkan pesan loading
             const loadingMessage = document.createElement('div');
             loadingMessage.textContent = 'Mengunduh PDF, harap tunggu...';
             loadingMessage.classList.add('fixed', 'inset-0', 'bg-gray-800', 'bg-opacity-75', 'flex', 'items-center', 'justify-center', 'text-white', 'text-xl', 'z-50');
             document.body.appendChild(loadingMessage);
 
             try {
-                // Simpan gaya asli elemen
-                const originalWidth = element.style.width;
-                const originalPadding = element.style.padding;
-                const originalFontSize = element.style.fontSize; 
-                const originalPosition = element.style.position; 
-                const originalTop = element.style.top; 
-                const originalLeft = element.style.left; 
-                const originalZIndex = element.style.zIndex; 
+                const originalStyles = {
+                    width: element.style.width,
+                    padding: element.style.padding,
+                    fontSize: element.style.fontSize,
+                    position: element.style.position,
+                    top: element.style.top,
+                    left: element.style.left,
+                    zIndex: element.style.zIndex
+                };
 
-                // Ambil pengaturan ukuran kertas dan margin dari input pengguna
                 const selectedPaperSize = paperSizeSelect.value;
                 const paperDimensions = paperSizes[selectedPaperSize];
                 
@@ -839,24 +994,20 @@
                 const marginBottom = parseFloat(marginBottomInput.value);
                 const marginLeft = parseFloat(marginLeftInput.value);
 
-                // Validasi margin
                 if (isNaN(marginTop) || isNaN(marginRight) || isNaN(marginBottom) || isNaN(marginLeft) ||
                     marginTop < 0 || marginRight < 0 || marginBottom < 0 || marginLeft < 0) {
                     throw new Error('Margin harus angka positif.');
                 }
 
-                // Sesuaikan gaya elemen untuk rendering HTML yang lebih baik sebelum diubah ke canvas
                 element.style.position = 'absolute';
                 element.style.top = '-9999px';
                 element.style.left = '-9999px';
                 element.style.zIndex = '-1'; 
 
-                // Lebar konten yang akan dirender di canvas agar pas di dalam lebar PDF setelah margin
                 const contentWidthForCanvas = paperDimensions.width - (marginLeft + marginRight); 
-                const contentHeightForCanvas = paperDimensions.height - (marginTop + marginBottom);
 
                 element.style.width = `${contentWidthForCanvas}mm`;
-                element.style.padding = `${marginTop}mm ${marginRight}mm ${marginBottom}mm ${marginLeft}mm`; // Terapkan margin sebagai padding
+                element.style.padding = `${marginTop}mm ${marginRight}mm ${marginBottom}mm ${marginLeft}mm`; 
                 element.style.fontSize = '10pt'; 
 
                 const canvas = await html2canvas(element, {
@@ -866,53 +1017,39 @@
                     windowHeight: element.scrollHeight
                 });
 
-                // Kembalikan gaya asli elemen
-                element.style.width = originalWidth;
-                element.style.padding = originalPadding;
-                element.style.fontSize = originalFontSize;
-                element.style.position = originalPosition;
-                element.style.top = originalTop;
-                element.style.left = originalLeft;
-                element.style.zIndex = originalZIndex;
+                Object.assign(element.style, originalStyles);
 
 
                 const imgData = canvas.toDataURL('image/png');
-                // Inisialisasi jsPDF dengan ukuran kertas yang dipilih
                 const pdf = new jsPDF('p', 'mm', [paperDimensions.width, paperDimensions.height]);
 
                 const pdfPageWidth = pdf.internal.pageSize.getWidth();
                 const pdfPageHeight = pdf.internal.pageSize.getHeight();
 
-                // Hitung lebar gambar di PDF agar sesuai dengan lebar halaman dikurangi margin
                 const imgWidthOnPdf = pdfPageWidth - (marginLeft + marginRight);
-                // Hitung tinggi gambar yang diskalakan agar proporsional dengan lebar baru
                 const imgHeightOnPdf = canvas.height * imgWidthOnPdf / canvas.width;
 
-                // Cek apakah konten lebih tinggi dari area cetak satu halaman
                 if (imgHeightOnPdf > (pdfPageHeight - (marginTop + marginBottom))) {
-                    // Jika ya, kita akan menskalakan seluruh gambar agar muat dalam satu halaman.
-                    const scaleFactor = (pdfPageHeight - (marginTop + marginBottom)) / imgHeightOnPdf;
+                    const scaleFactor = (pdfPageHeight - (marginTop + marginBottom)) / imgWidthOnPdf;
                     const scaledImgWidth = imgWidthOnPdf * scaleFactor;
                     const scaledImgHeight = imgHeightOnPdf * scaleFactor;
 
-                    // Tambahkan gambar yang diskalakan ke PDF
                     pdf.addImage(
                         imgData,
                         'PNG',
-                        marginLeft + (imgWidthOnPdf - scaledImgWidth) / 2, // Pusatkan lebar
-                        marginTop, // Margin atas
+                        marginLeft + (imgWidthOnPdf - scaledImgWidth) / 2, 
+                        marginTop, 
                         scaledImgWidth,
                         scaledImgHeight
                     );
                 } else {
-                    // Jika tidak, gambar muat di satu halaman tanpa penskalaan tambahan
                     pdf.addImage(
                         imgData,
                         'PNG',
-                        marginLeft, // Posisi x di halaman PDF (margin kiri)
-                        marginTop, // Posisi y di halaman PDF (margin atas)
-                        imgWidthOnPdf, // Lebar gambar di halaman PDF
-                        imgHeightOnPdf // Tinggi gambar di halaman PDF
+                        marginLeft, 
+                        marginTop, 
+                        imgWidthOnPdf, 
+                        imgHeightOnPdf 
                     );
                 }
                 
@@ -920,15 +1057,10 @@
                 pdf.save(`Kuitansi-${noKuitansi}.pdf`);
             } catch (error) {
                 console.error("Error generating PDF:", error);
-                const errorMessage = document.createElement('div');
-                errorMessage.textContent = `Gagal mengunduh PDF: ${error.message}. Silakan coba lagi.`;
-                errorMessage.classList.add('fixed', 'inset-0', 'bg-red-800', 'bg-opacity-75', 'flex', 'items-center', 'justify-center', 'text-white', 'text-xl', 'z-50');
-                document.body.appendChild(errorMessage);
-                setTimeout(() => errorMessage.remove(), 5000);
+                showStatusMessage(`Gagal mengunduh PDF: ${error.message}. Silakan coba lagi.`, 'error');
             } finally {
-                // Pastikan tombol-tombol kembali terlihat
                 buttonsToHide.forEach(btn => btn.style.display = '');
-                loadingMessage.remove(); // Hapus pesan loading
+                loadingMessage.remove(); 
             }
         }
 
@@ -938,31 +1070,37 @@
             reportSection.classList.add('hidden');
             navForm.classList.add('bg-indigo-700');
             navReport.classList.remove('bg-indigo-700');
-            receiptDetailView.classList.add('hidden'); // Sembunyikan detail jika kembali ke form
+            receiptDetailView.classList.add('hidden'); 
+            resetForm(); 
         }
 
         // Fungsi untuk menampilkan bagian laporan dan menyembunyikan formulir
-        function showReportSection() {
+        async function showReportSection() {
             reportSection.classList.remove('hidden');
             formSection.classList.add('hidden');
             navReport.classList.add('bg-indigo-700');
             navForm.classList.remove('bg-indigo-700');
             
-            // Pastikan menampilkan daftar kuitansi, sembunyikan detail
             receiptsReportTableContainer.classList.remove('hidden');
             receiptDetailView.classList.add('hidden');
-            renderSavedReceipts(); // Pastikan laporan diperbarui saat dilihat
+            
+            // Muat data terbaru dari Google Sheet
+            await loadReceipts();
+            renderSavedReceipts(); 
         }
 
         // Fungsi untuk menangani proses login
-        function handleLogin() {
+        async function handleLogin() {
             const username = usernameInput.value.trim();
-            if (username.toUpperCase() === 'FAMI') { // Case-insensitive check
+            if (username.toUpperCase() === 'FAMI') { 
                 loginSection.classList.add('hidden');
                 appContainer.classList.remove('hidden');
-                loginMessage.classList.add('hidden'); // Hide any previous error message
-                resetForm(); // Reset form and set current date on successful login
-                showFormSection(); // Show the form section by default
+                loginMessage.classList.add('hidden'); 
+                
+                // Muat data dari Sheet saat login
+                await loadReceipts();
+                resetForm(); 
+                showFormSection(); 
             } else {
                 loginMessage.textContent = 'Nama pengguna salah. Silakan coba lagi.';
                 loginMessage.classList.remove('hidden');
@@ -973,8 +1111,8 @@
         function handleLogout() {
             appContainer.classList.add('hidden');
             loginSection.classList.remove('hidden');
-            usernameInput.value = ''; // Clear username input
-            loginMessage.classList.add('hidden'); // Hide any error message
+            usernameInput.value = ''; 
+            loginMessage.classList.add('hidden'); 
         }
 
         // Event Listeners
@@ -1008,6 +1146,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loginSection.classList.remove('hidden');
             appContainer.classList.add('hidden');
+            resetForm();
         });
     </script>
 </body>
