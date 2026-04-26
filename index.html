@@ -49,7 +49,7 @@
                 <div class="flex justify-center mb-4">
                     <img src="https://iili.io/B6vhnlp.th.png" alt="Logo Fami Collection" class="h-20 w-auto">
                 </div>
-                <h1 class="text-4xl font-black text-blue-700 tracking-tighter">FAMI</h1>
+                <h1 class="text-4xl font-black text-blue-700 tracking-tighter text-blue-700">FAMI</h1>
                 <p class="text-gray-400 font-semibold uppercase tracking-widest text-xs">Collection System</p>
                 <div class="pt-2">
                     <h2 class="text-xl font-bold">Silakan Masuk</h2>
@@ -70,7 +70,7 @@
                     Username atau Sandi salah!
                 </div>
                 <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 transition transform hover:-translate-y-1 active:scale-95 text-white">
-                    MASUK
+                    MASUK 
                 </button>
             </form>
             <p class="text-center text-xs text-gray-400">Copyright &copy; 2026 Fami Collection</p>
@@ -130,7 +130,7 @@
                 <!-- Page: Beranda -->
                 <div id="page-beranda" class="space-y-6 animate-in fade-in duration-500 text-gray-900">
                     <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-10 rounded-3xl shadow-lg text-white">
-                        <h1 class="text-4xl font-black mb-2 text-white">Halo, Selamat Datang!</h1>
+                        <h1 class="text-4xl font-black mb-2 text-white">Halo Fami, Selamat Datang!</h1>
                         <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Resmi Fami Collection.</p>
                     </div>
                     
@@ -182,12 +182,16 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-800">Riwayat Kuitansi</h3>
-                            <p class="text-sm text-gray-500">Data tersimpan otomatis di Google Sheets.</p>
+                    <!-- Filter & Add Section -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div class="flex-1 w-full md:max-w-md">
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 block">Cari No. Kuitansi</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">🔍</span>
+                                <input type="text" id="filter-id" oninput="renderList()" placeholder="Masukkan No. Kuitansi (Contoh: FM-0001)" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                            </div>
                         </div>
-                        <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-bold flex items-center transition transform hover:scale-105 shadow-xl shadow-blue-200 text-white">
+                        <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-bold flex items-center transition transform hover:scale-105 shadow-xl shadow-blue-200 text-white whitespace-nowrap">
                             <span class="mr-2 text-xl text-white font-bold">+</span> Tambah Data
                         </button>
                     </div>
@@ -207,7 +211,7 @@
                         </table>
                         <div id="empty-state" class="p-20 text-center hidden flex flex-col items-center">
                             <div class="text-6xl mb-4 opacity-20 text-gray-400">📄</div>
-                            <p class="text-gray-400 font-medium italic">Belum ada kuitansi di database.</p>
+                            <p class="text-gray-400 font-medium italic">Data tidak ditemukan.</p>
                         </div>
                     </div>
                 </div>
@@ -223,7 +227,7 @@
                     <h2 id="modal-title" class="text-3xl font-black text-gray-800">Buat Kuitansi Baru</h2>
                     <p class="text-gray-500 text-sm">Lengkapi detail transaksi untuk disimpan ke Cloud.</p>
                 </div>
-                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all text-3xl font-light">&times;</button>
+                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all text-3xl font-light text-gray-900">&times;</button>
             </div>
             
             <form id="receipt-form" class="p-10 space-y-10">
@@ -265,7 +269,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Tanggal Transaksi</label>
-                            <input type="date" id="form-date" required class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900">
+                            <input type="date" id="form-date" required class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900 text-gray-900">
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">No. HP Pelanggan</label>
@@ -383,7 +387,7 @@
         }
 
         async function syncData() {
-            toggleLoading(true, "SINGKRONISASI...");
+            toggleLoading(true, "SINGKRONISASI");
             try {
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
@@ -392,13 +396,17 @@
                     receipts = data.map(r => ({
                         ...r,
                         date: cleanDateString(r.date)
-                    })).reverse(); 
+                    }));
                 } else {
                     receipts = [];
                 }
                 
+                // Urutkan receipts berdasarkan ID FM-XXXX-YYYY Ascending
+                receipts.sort((a, b) => a.id.localeCompare(b.id));
+
                 if (receipts.length > 0) {
-                    const lastId = receipts[0].id;
+                    // Ambil ID tertinggi untuk menentukan nextSequence
+                    const lastId = [...receipts].sort((a, b) => b.id.localeCompare(a.id))[0].id;
                     const match = lastId.match(/FM-(\d+)-/);
                     if (match) nextSequence = parseInt(match[1]) + 1;
                 }
@@ -464,7 +472,7 @@
                 <td class="p-4 w-24"><input type="number" value="${qty}" min="1" class="item-qty w-full border rounded-xl p-3 text-center font-bold text-gray-900" oninput="calculate()"></td>
                 <td class="p-4 w-56"><input type="number" value="${price}" placeholder="0" class="item-price w-full border rounded-xl p-3 text-right font-bold text-gray-900" oninput="calculate()"></td>
                 <td class="p-4 text-right font-black text-blue-700 item-total">Rp 0</td>
-                <td class="p-4 text-center"><button type="button" onclick="this.closest('tr').remove(); calculate()" class="text-red-400 text-2xl">&times;</button></td>
+                <td class="p-4 text-center"><button type="button" onclick="this.closest('tr').remove(); calculate()" class="text-red-400 text-2xl text-red-400">&times;</button></td>
             `;
             document.getElementById('item-rows').appendChild(tr);
             calculate();
@@ -530,18 +538,32 @@
             }
         };
 
+        // RENDER LIST DENGAN FILTER & SORTING ASCENDING
         function renderList() {
             const list = document.getElementById('receipt-list');
+            const searchTerm = document.getElementById('filter-id').value.toLowerCase();
             list.innerHTML = '';
             
-            if (!receipts || !Array.isArray(receipts) || receipts.length === 0) {
+            // Pengurutan Ascending (ID FM-0001 akan muncul pertama)
+            let sortedReceipts = [...receipts].sort((a, b) => a.id.localeCompare(b.id));
+
+            // Filter data
+            let filteredReceipts = sortedReceipts.filter(r => 
+                r.id.toLowerCase().includes(searchTerm) || 
+                r.customer.toLowerCase().includes(searchTerm)
+            );
+
+            if (!filteredReceipts || filteredReceipts.length === 0) {
                 document.getElementById('empty-state').classList.remove('hidden');
                 return;
             }
             
             document.getElementById('empty-state').classList.add('hidden');
 
-            receipts.forEach((r, idx) => {
+            filteredReceipts.forEach((r) => {
+                // Cari index asli dari array receipts untuk fungsi Edit
+                const originalIdx = receipts.findIndex(item => item.id === r.id);
+                
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-blue-50/30 transition-colors group text-gray-900";
                 tr.innerHTML = `
@@ -550,8 +572,8 @@
                     <td class="px-8 py-6 text-center text-gray-500 font-medium">${formatDisplayDateFull(r.date)}</td>
                     <td class="px-8 py-6 text-right font-black text-gray-800">${formatRupiah(r.total)}</td>
                     <td class="px-8 py-6 text-center space-x-3">
-                        <button onclick="editAction(${idx})" class="text-blue-600 hover:text-blue-800 font-bold text-sm">Edit</button>
-                        <button onclick="printAction(${idx})" class="text-green-600 hover:text-green-800 font-bold text-sm">Cetak</button>
+                        <button onclick="editAction(${originalIdx})" class="text-blue-600 hover:text-blue-800 font-bold text-sm">Edit</button>
+                        <button onclick="printAction(${originalIdx})" class="text-green-600 hover:text-green-800 font-bold text-sm">Cetak</button>
                     </td>
                 `;
                 list.appendChild(tr);
