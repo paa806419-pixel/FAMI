@@ -23,7 +23,6 @@
             body { background: white !important; }
         }
 
-        /* Loading Animation */
         .loader {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #3b82f6;
@@ -40,11 +39,11 @@
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[200] flex flex-col items-center justify-center hidden">
         <div class="loader mb-4"></div>
-        <p class="font-bold text-blue-600 animate-pulse text-lg text-blue-600">SINGKRONISASI</p>
+        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">SINGKRONISASI</p>
     </div>
 
     <!-- Login Page -->
-    <div id="login-page" class="fixed inset-0 bg-blue-700 z-[100] flex items-center justify-center p-6">
+    <div id="login-page" class="fixed inset-0 bg-blue-700 z-[100] flex items-center justify-center p-6 text-gray-900">
         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-10 space-y-6 animate-in zoom-in duration-300">
             <div class="text-center space-y-2">
                 <div class="flex justify-center mb-4">
@@ -53,7 +52,7 @@
                 <h1 class="text-4xl font-black text-blue-700 tracking-tighter">FAMI</h1>
                 <p class="text-gray-400 font-semibold uppercase tracking-widest text-xs">Collection System</p>
                 <div class="pt-2">
-                    <h2 class="text-xl font-bold text-gray-800">Silakan Masuk</h2>
+                    <h2 class="text-xl font-bold">Silakan Masuk</h2>
                     <p class="text-sm text-gray-500">Gunakan akun Anda untuk mengakses sistem.</p>
                 </div>
             </div>
@@ -91,17 +90,17 @@
             </div>
             <nav class="mt-4 flex-1">
                 <button onclick="switchPage('beranda')" id="nav-beranda" class="w-full flex items-center py-4 px-8 sidebar-active hover:bg-blue-600 transition-all duration-200 text-white">
-                    <span class="mr-3 text-xl">🏠</span> 
-                    <span class="font-medium">Beranda</span>
+                    <span class="mr-3 text-xl text-white">🏠</span> 
+                    <span class="font-medium text-white">Beranda</span>
                 </button>
                 <button onclick="switchPage('kuitansi')" id="nav-kuitansi" class="w-full flex items-center py-4 px-8 hover:bg-blue-600 transition-all duration-200 text-white">
-                    <span class="mr-3 text-xl">📄</span> 
-                    <span class="font-medium">Kuitansi</span>
+                    <span class="mr-3 text-xl text-white">📄</span> 
+                    <span class="font-medium text-white">Kuitansi</span>
                 </button>
             </nav>
             <div class="p-4 border-t border-blue-600">
                 <button onclick="logout()" class="w-full flex items-center py-3 px-6 rounded-xl hover:bg-red-600/20 text-blue-200 hover:text-red-400 transition-all font-bold text-sm">
-                    <span class="mr-3 text-xl">🔓</span> KELUAR 
+                    <span class="mr-3 text-xl">🔓</span> KELUAR
                 </button>
             </div>
             <div class="p-6 text-[10px] text-blue-300 italic border-t border-blue-800/30">
@@ -111,15 +110,14 @@
 
         <!-- Main Content -->
         <main class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-            <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center no-print z-10">
+            <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center no-print z-10 text-gray-900">
                 <div class="flex items-center space-x-4">
                     <h2 id="page-title" class="text-2xl font-bold text-gray-800">Beranda</h2>
-                    <!-- Tombol Singkron -->
                     <button onclick="syncData()" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Refresh Data Cloud">🔄</button>
-                    <!-- Tombol Database Baru -->
+                    <!-- Tombol Database -->
                     <button onclick="window.open('https://docs.google.com/spreadsheets/d/1lnw1srOmzmx4VSPGyigIFZ3Ri7TXrGkJ0PjKr2SO0SQ/edit?usp=sharing', '_blank')" class="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg shadow-green-100 transition transform active:scale-95" title="Buka Database Google Sheet">
                         <span class="text-white">📊</span>
-                        <span class="text-white">Database</span>
+                        <span class="text-white font-bold">Database</span>
                     </button>
                 </div>
                 <div class="text-right">
@@ -130,7 +128,7 @@
 
             <div class="flex-1 overflow-y-auto p-8">
                 <!-- Page: Beranda -->
-                <div id="page-beranda" class="space-y-6 animate-in fade-in duration-500">
+                <div id="page-beranda" class="space-y-6 animate-in fade-in duration-500 text-gray-900">
                     <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-10 rounded-3xl shadow-lg text-white">
                         <h1 class="text-4xl font-black mb-2 text-white">Halo, Selamat Datang!</h1>
                         <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Resmi Fami Collection.</p>
@@ -162,8 +160,7 @@
                 </div>
 
                 <!-- Page: Daftar Kuitansi -->
-                <div id="page-kuitansi" class="hidden space-y-6 animate-in fade-in duration-500">
-                    <!-- Print Settings Panel -->
+                <div id="page-kuitansi" class="hidden space-y-6 animate-in fade-in duration-500 text-gray-900">
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-4">
                         <h4 class="text-sm font-bold text-gray-700 uppercase tracking-widest flex items-center">
                             <span class="mr-2">⚙️</span> Pengaturan Cetak
@@ -191,7 +188,7 @@
                             <p class="text-sm text-gray-500">Data tersimpan otomatis di Google Sheets.</p>
                         </div>
                         <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-bold flex items-center transition transform hover:scale-105 shadow-xl shadow-blue-200 text-white">
-                            <span class="mr-2 text-xl text-white">+</span> Tambah Data
+                            <span class="mr-2 text-xl text-white font-bold">+</span> Tambah Data
                         </button>
                     </div>
 
@@ -219,19 +216,20 @@
     </div>
 
     <!-- Modal Form -->
-    <div id="receipt-modal" class="fixed inset-0 bg-gray-900/70 backdrop-blur-md z-50 flex items-center justify-center hidden p-4 no-print overflow-y-auto">
+    <div id="receipt-modal" class="fixed inset-0 bg-gray-900/70 backdrop-blur-md z-50 flex items-center justify-center hidden p-4 no-print overflow-y-auto text-gray-900">
         <div class="bg-white w-full max-w-6xl rounded-3xl shadow-2xl my-auto animate-in zoom-in duration-300">
             <div class="p-8 border-b sticky top-0 bg-white/90 backdrop-blur-md z-10 flex justify-between items-center rounded-t-3xl text-gray-900">
                 <div>
-                    <h2 class="text-3xl font-black text-gray-800">Buat Kuitansi Baru</h2>
+                    <h2 id="modal-title" class="text-3xl font-black text-gray-800">Buat Kuitansi Baru</h2>
                     <p class="text-gray-500 text-sm">Lengkapi detail transaksi untuk disimpan ke Cloud.</p>
                 </div>
                 <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all text-3xl font-light">&times;</button>
             </div>
             
             <form id="receipt-form" class="p-10 space-y-10">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 text-gray-900">
-                    <div class="lg:col-span-1 space-y-6 text-gray-900">
+                <input type="hidden" id="form-mode" value="add">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1 space-y-6">
                         <div class="p-6 bg-blue-50 rounded-2xl border border-blue-100">
                             <label class="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">No. Kuitansi</label>
                             <input type="text" id="form-no-kuitansi" readonly class="w-full bg-transparent border-none p-0 font-black text-2xl text-blue-800 focus:ring-0">
@@ -256,27 +254,27 @@
                         </div>
                     </div>
 
-                    <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-900">
+                    <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Nama Pelanggan / Institusi</label>
                             <input type="text" id="form-customer-name" required placeholder="Nama Pelanggan" class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none text-xl font-semibold transition-all text-gray-900">
                         </div>
-                        <div class="md:col-span-2 text-gray-900">
+                        <div class="md:col-span-2">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Pelanggan</label>
                             <textarea id="form-address" rows="2" placeholder="Alamat pelanggan..." class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900"></textarea>
                         </div>
-                        <div class="text-gray-900">
+                        <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Tanggal Transaksi</label>
-                            <input type="date" id="form-date" required class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900 text-gray-900">
+                            <input type="date" id="form-date" required class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900">
                         </div>
-                        <div class="text-gray-900">
+                        <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">No. HP Pelanggan</label>
                             <input type="text" id="form-phone" placeholder="08..." class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900">
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-8 border-t border-gray-100 text-gray-900">
+                <div class="pt-8 border-t border-gray-100">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-bold text-gray-800">Detail Pesanan</h3>
                         <button type="button" onclick="addItemRow()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-xl font-bold text-sm transition shadow-lg shadow-green-100 transform active:scale-95 text-white">+ Tambah Baris</button>
@@ -297,9 +295,8 @@
                     </div>
                 </div>
 
-                <!-- Footer Summary dengan Font Diperkecil -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-10 border-t border-gray-100">
-                    <div class="space-y-4 text-gray-900">
+                    <div class="space-y-4">
                         <label class="block text-sm font-bold text-gray-700">Catatan Khusus</label>
                         <textarea id="form-note" rows="3" placeholder="Informasi tambahan..." class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all italic text-gray-600"></textarea>
                     </div>
@@ -307,12 +304,10 @@
                     <div class="p-8 bg-gray-900 rounded-3xl text-white flex flex-col justify-center shadow-2xl">
                         <div class="flex justify-between items-center opacity-60 mb-2">
                             <span class="text-xs font-bold uppercase tracking-widest text-white/70">Subtotal</span>
-                            <!-- Diperkecil menjadi text-sm dan break-all agar tidak overflow -->
                             <span id="display-subtotal" class="font-bold text-white/90 text-sm break-all">Rp 0</span>
                         </div>
                         <div class="flex justify-between items-baseline mt-4 border-t border-white/10 pt-6 text-white flex-wrap gap-2">
                             <span class="text-sm font-bold text-blue-400 uppercase tracking-widest">Total Keseluruhan</span>
-                            <!-- Diperkecil dari text-5xl menjadi text-3xl agar muat angka besar -->
                             <span id="display-grandtotal" class="text-3xl font-black text-white break-all">Rp 0</span>
                         </div>
                     </div>
@@ -320,7 +315,7 @@
 
                 <div class="flex justify-end space-x-4 pt-4">
                     <button type="button" onclick="closeModal()" class="px-10 py-4 rounded-2xl border-2 border-gray-100 text-gray-400 hover:bg-gray-50 font-bold transition">Batal</button>
-                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 text-white uppercase">Simpan Data Ke Cloud</button>
+                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase text-white">SIMPAN</button>
                 </div>
             </form>
         </div>
@@ -328,7 +323,6 @@
 
     <!-- Scripts -->
     <script>
-        // SINKRONISASI GOOGLE SHEETS URL (Apps Script)
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTcT9PVqNyJCfbnYJXXbLUTmAmkOlfTzE_hxlEzEObuxWkW8nEAE8VXxU0JxeyRSFbxA/exec";
 
         let receipts = [];
@@ -340,40 +334,21 @@
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
 
-        // FUNGSI PEMBERSIH TANGGAL YANG LEBIH KUAT
         function cleanDateString(dateStr) {
             if (!dateStr) return "";
-            
             let s = String(dateStr);
-            
-            // 1. Jika format ISO (berisi 'T'), ambil bagian depannya
             if (s.includes('T')) return s.split('T')[0];
-
-            // 2. Jika format panjang seperti "Sun Apr 26 2026 00:00:00 GM"
             let clean = s.replace(/GM$/, 'GMT').replace(/^[A-Za-z]{3}\s/, '');
             let d = new Date(clean);
-            
             if (!isNaN(d.getTime())) {
                 const year = d.getFullYear();
                 const month = String(d.getMonth() + 1).padStart(2, '0');
                 const day = String(d.getDate()).padStart(2, '0');
                 return `${year}-${month}-${day}`;
             }
-
-            // 3. Fallback Regex jika Date() masih gagal
-            const monthsMap = {Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
-            const match = s.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d+)\s+(\d{4})/);
-            if (match) {
-                const m = String(monthsMap[match[1]]).padStart(2, '0');
-                const day = String(match[2]).padStart(2, '0');
-                const y = match[3];
-                return `${y}-${m}-${day}`;
-            }
-
             return s;
         }
 
-        // Memformat ke tampilan Indonesia: "26 April 2026"
         function formatDisplayDateFull(dateStr) {
             if (!dateStr) return "-";
             const clean = cleanDateString(dateStr);
@@ -393,54 +368,53 @@
             e.preventDefault();
             const u = document.getElementById('login-username').value;
             const p = document.getElementById('login-password').value;
-            const err = document.getElementById('login-error');
-
             if (u === 'FAMI' && p === '12345') {
                 document.getElementById('login-page').classList.add('hidden');
                 document.getElementById('main-app').classList.remove('hidden');
                 document.body.classList.remove('overflow-hidden');
-                err.classList.add('hidden');
                 syncData(); 
             } else {
-                err.classList.remove('hidden');
+                document.getElementById('login-error').classList.remove('hidden');
             }
         };
 
         function logout() {
-            document.getElementById('login-page').classList.remove('hidden');
-            document.getElementById('main-app').classList.add('hidden');
-            document.body.classList.add('overflow-hidden');
-            document.getElementById('login-form').reset();
             location.reload(); 
         }
 
         async function syncData() {
-            toggleLoading(true);
+            toggleLoading(true, "Sinkronisasi Cloud...");
             try {
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
                 
-                receipts = data.map(r => ({
-                    ...r,
-                    date: cleanDateString(r.date)
-                })).reverse(); 
+                if (data && Array.isArray(data)) {
+                    receipts = data.map(r => ({
+                        ...r,
+                        date: cleanDateString(r.date)
+                    })).reverse(); 
+                } else {
+                    receipts = [];
+                }
                 
                 if (receipts.length > 0) {
                     const lastId = receipts[0].id;
                     const match = lastId.match(/FM-(\d+)-/);
                     if (match) nextSequence = parseInt(match[1]) + 1;
                 }
-
                 initApp();
                 renderList();
             } catch (err) {
                 console.error("Sinkronisasi gagal:", err);
+                receipts = [];
+                renderList();
             } finally {
                 toggleLoading(false);
             }
         }
 
-        function toggleLoading(show) {
+        function toggleLoading(show, text = "Menghubungkan ke Cloud...") {
+            document.getElementById('loading-text').innerText = text;
             document.getElementById('loading-overlay').classList.toggle('hidden', !show);
         }
 
@@ -455,7 +429,6 @@
         function switchPage(page) {
             document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
             document.querySelectorAll('[id^="nav-"]').forEach(n => n.classList.remove('sidebar-active'));
-
             document.getElementById('page-' + page).classList.remove('hidden');
             document.getElementById('nav-' + page).classList.add('sidebar-active');
             document.getElementById('page-title').innerText = page.charAt(0).toUpperCase() + page.slice(1);
@@ -467,6 +440,8 @@
 
         function openModal() {
             document.getElementById('receipt-form').reset();
+            document.getElementById('form-mode').value = 'add';
+            document.getElementById('modal-title').innerText = 'Buat Kuitansi Baru';
             document.getElementById('item-rows').innerHTML = '';
             addItemRow();
             document.getElementById('form-date').valueAsDate = new Date();
@@ -481,17 +456,18 @@
             document.body.style.overflow = 'auto';
         }
 
-        function addItemRow() {
+        function addItemRow(desc = '', qty = 1, price = 0) {
             const tr = document.createElement('tr');
             tr.className = "group hover:bg-white transition-colors text-gray-900";
             tr.innerHTML = `
-                <td class="p-4"><input type="text" placeholder="Deskripsi item" class="item-desc w-full border rounded-xl p-3 font-medium text-gray-900" required></td>
-                <td class="p-4 w-24"><input type="number" value="1" min="1" class="item-qty w-full border rounded-xl p-3 text-center font-bold text-gray-900" oninput="calculate()"></td>
-                <td class="p-4 w-56"><input type="number" placeholder="0" class="item-price w-full border rounded-xl p-3 text-right font-bold text-gray-900" oninput="calculate()"></td>
+                <td class="p-4"><input type="text" value="${desc}" placeholder="Deskripsi item" class="item-desc w-full border rounded-xl p-3 font-medium text-gray-900" required></td>
+                <td class="p-4 w-24"><input type="number" value="${qty}" min="1" class="item-qty w-full border rounded-xl p-3 text-center font-bold text-gray-900" oninput="calculate()"></td>
+                <td class="p-4 w-56"><input type="number" value="${price}" placeholder="0" class="item-price w-full border rounded-xl p-3 text-right font-bold text-gray-900" oninput="calculate()"></td>
                 <td class="p-4 text-right font-black text-blue-700 item-total">Rp 0</td>
                 <td class="p-4 text-center"><button type="button" onclick="this.closest('tr').remove(); calculate()" class="text-red-400 text-2xl">&times;</button></td>
             `;
             document.getElementById('item-rows').appendChild(tr);
+            calculate();
         }
 
         function calculate() {
@@ -515,13 +491,11 @@
         document.getElementById('receipt-form').onsubmit = async function(e) {
             e.preventDefault();
             const grandTotal = calculate();
-            const finalDate = cleanDateString(document.getElementById('form-date').value);
-
             const payload = {
                 id: document.getElementById('form-no-kuitansi').value,
                 customer: document.getElementById('form-customer-name').value,
                 address: document.getElementById('form-address').value,
-                date: finalDate, 
+                date: cleanDateString(document.getElementById('form-date').value), 
                 phone: document.getElementById('form-phone').value,
                 payment: document.getElementById('form-payment').value,
                 signer: document.getElementById('form-signer').value,
@@ -536,7 +510,7 @@
                 }))
             };
 
-            toggleLoading(true);
+            toggleLoading(true, "Menyimpan ke Cloud...");
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -546,10 +520,11 @@
                 if (result.status === "success") {
                     closeModal();
                     await syncData(); 
-                    showToast(payload.id);
+                    showToast(payload.id, "Berhasil Tersimpan");
                 }
             } catch (err) {
-                alert("Cloud Error: Gagal menyimpan data.");
+                console.error(err);
+                alert("Gagal menyimpan data.");
             } finally {
                 toggleLoading(false);
             }
@@ -558,7 +533,13 @@
         function renderList() {
             const list = document.getElementById('receipt-list');
             list.innerHTML = '';
-            document.getElementById('empty-state').classList.toggle('hidden', receipts.length > 0);
+            
+            if (!receipts || !Array.isArray(receipts) || receipts.length === 0) {
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            }
+            
+            document.getElementById('empty-state').classList.add('hidden');
 
             receipts.forEach((r, idx) => {
                 const tr = document.createElement('tr');
@@ -568,8 +549,9 @@
                     <td class="px-8 py-6"><div class="font-bold text-gray-800">${r.customer}</div></td>
                     <td class="px-8 py-6 text-center text-gray-500 font-medium">${formatDisplayDateFull(r.date)}</td>
                     <td class="px-8 py-6 text-right font-black text-gray-800">${formatRupiah(r.total)}</td>
-                    <td class="px-8 py-6 text-center">
-                        <button onclick="printAction(${idx})" class="text-blue-600 hover:underline font-bold text-sm">Cetak</button>
+                    <td class="px-8 py-6 text-center space-x-3">
+                        <button onclick="editAction(${idx})" class="text-blue-600 hover:text-blue-800 font-bold text-sm">Edit</button>
+                        <button onclick="printAction(${idx})" class="text-green-600 hover:text-green-800 font-bold text-sm">Cetak</button>
                     </td>
                 `;
                 list.appendChild(tr);
@@ -583,12 +565,37 @@
             document.getElementById('stat-year').innerText = activeYear;
         }
 
-        function showToast(id) {
+        function showToast(id, msg) {
             const t = document.createElement('div');
-            t.className = "fixed bottom-10 right-10 bg-gray-900 text-white px-8 py-4 rounded-2xl shadow-2xl z-[100] animate-bounce font-bold";
-            t.innerText = `Data ${id} Tersimpan di Cloud`;
+            t.className = "fixed bottom-10 right-10 bg-gray-900 text-white px-8 py-4 rounded-2xl shadow-2xl z-[500] animate-bounce font-bold";
+            t.innerText = `Kuitansi ${id} ${msg}`;
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 3000);
+        }
+
+        function editAction(idx) {
+            const r = receipts[idx];
+            document.getElementById('form-mode').value = 'edit';
+            document.getElementById('modal-title').innerText = 'Edit Kuitansi';
+            document.getElementById('form-no-kuitansi').value = r.id;
+            document.getElementById('form-customer-name').value = r.customer;
+            document.getElementById('form-address').value = r.address || '';
+            document.getElementById('form-date').value = cleanDateString(r.date);
+            document.getElementById('form-phone').value = r.phone || '';
+            document.getElementById('form-payment').value = r.payment;
+            document.getElementById('form-signer').value = r.signer;
+            document.getElementById('form-receiver-name').value = r.receiverName || '';
+            document.getElementById('form-note').value = r.note || '';
+            
+            document.getElementById('item-rows').innerHTML = '';
+            if (r.items && r.items.length > 0) {
+                r.items.forEach(it => addItemRow(it.desc, it.qty, it.price));
+            } else {
+                addItemRow();
+            }
+            
+            document.getElementById('receipt-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function printAction(i) {
@@ -616,11 +623,10 @@
                     <style>
                         @page { size: ${size}; margin: ${mTop}mm ${mRight}mm ${mBottom}mm ${mLeft}mm; }
                         body { font-family: 'Cambria', serif; color: #333; line-height: 1.2; font-size: 11px; }
-                        .paper { max-width: 100%; }
                         .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
                         .logo-img { height: 45px; margin-right: 12px; }
                         .logo-text { font-size: 20px; font-weight: 800; color: #1e40af; margin-bottom: 2px; }
-                        .biz-info { font-size: 9px; color: #555; margin-bottom: 1px; line-height: 1.1; }
+                        .biz-info { font-size: 9px; color: #555; line-height: 1.1; }
                         .nota-title { color: #1e40af; font-size: 18px; font-weight: 800; text-transform: uppercase; margin: 0; }
                         .divider { border-top: 2px solid #000; margin: 8px 0; }
                         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
@@ -652,10 +658,7 @@
                     <div class="divider"></div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:15px">
                         <div>
-                            <strong>Pelanggan:</strong><br>
-                            ${d.customer}<br>
-                            ${d.address || '-'}<br>
-                            ${d.phone ? 'No. HP: ' + d.phone : ''}
+                            <strong>Pelanggan:</strong><br>${d.customer}<br>${d.address || '-'}<br>${d.phone ? 'No. HP: ' + d.phone : ''}
                         </div>
                         <div style="text-align:right"><strong>Metode:</strong><br>${d.payment}</div>
                     </div>
