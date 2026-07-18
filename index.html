@@ -2,14 +2,28 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Fami Collection</title>
+    
+    <!-- PWA & Layar Penuh Meta Tags (Edge, Chrome, Safari) -->
+    <meta name="theme-color" content="#1d4ed8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Fami Collection">
+    <link id="manifest-link" rel="manifest">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://iili.io/B6vhnlp.th.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            /* Mencegah overscroll bounce pada tablet & smartphone */
+            overscroll-behavior-y: contain;
+        }
         .sidebar-active { background-color: rgba(255, 255, 255, 0.2); border-left: 4px solid white; }
         
         /* Custom Scrollbar */
@@ -27,19 +41,24 @@
             border: 4px solid #f3f3f3;
             border-top: 4px solid #3b82f6;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 72px;
+            height: 72px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen text-gray-900 overflow-hidden">
+<body class="bg-gray-50 min-h-screen text-gray-900 overflow-hidden select-none">
 
-    <!-- Loading Overlay -->
+    <!-- Loading Overlay with Integrated Logo inside rotating ring -->
     <div id="loading-overlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[200] flex flex-col items-center justify-center hidden">
-        <div class="loader mb-4"></div>
-        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">SINGKRONISASI</p>
+        <div class="relative flex items-center justify-center mb-4">
+            <!-- Rotating loader ring -->
+            <div class="loader"></div>
+            <!-- Centered Stationary Logo inside rotating ring -->
+            <img src="https://iili.io/CjM3XgR.png" onerror="this.onerror=null; this.src='https://iili.io/CjM3XgR.th.png';" class="absolute w-12 h-12 object-contain p-1 rounded-full bg-white/90 shadow-sm" alt="Sync Logo">
+        </div>
+        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">Menghubungkan ke Cloud...</p>
     </div>
 
     <!-- Login Page -->
@@ -49,7 +68,7 @@
                 <div class="flex justify-center mb-4">
                     <img src="https://iili.io/B6vhnlp.th.png" alt="Logo Fami Collection" class="h-20 w-auto">
                 </div>
-                <h1 class="text-4xl font-black text-blue-700 tracking-tighter text-blue-700">FAMI</h1>
+                <h1 class="text-4xl font-black text-blue-700 tracking-tighter">FAMI</h1>
                 <p class="text-gray-400 font-semibold uppercase tracking-widest text-xs">Collection System</p>
                 <div class="pt-2 text-gray-900">
                     <h2 class="text-xl font-bold">Silakan Masuk</h2>
@@ -70,7 +89,7 @@
                     Username atau Sandi salah!
                 </div>
                 <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 transition transform hover:-translate-y-1 active:scale-95 text-white">
-                    MASUK 
+                    MASUK
                 </button>
             </form>
             <p class="text-center text-xs text-gray-400">Copyright &copy; 2026 Fami Collection</p>
@@ -86,7 +105,7 @@
                     <img src="https://iili.io/B6vhnlp.th.png" alt="Logo Small" class="h-8 w-auto brightness-0 invert">
                     <h1 class="text-2xl font-extrabold tracking-tighter text-white">FAMI</h1>
                 </div>
-                <p class="text-xs text-blue-200 uppercase tracking-widest font-semibold mt-1"></p>
+                <p class="text-xs text-blue-200 uppercase tracking-widest font-semibold mt-1">Collection</p>
             </div>
             <nav class="mt-4 flex-1">
                 <button onclick="switchPage('beranda')" id="nav-beranda" class="w-full flex items-center py-4 px-8 sidebar-active hover:bg-blue-600 transition-all duration-200 text-white">
@@ -100,7 +119,7 @@
             </nav>
             <div class="p-4 border-t border-blue-600">
                 <button onclick="logout()" class="w-full flex items-center py-3 px-6 rounded-xl hover:bg-red-600/20 text-blue-200 hover:text-red-400 transition-all font-bold text-sm">
-                    <span class="mr-3 text-xl">🔓</span> KELUAR
+                    <span class="mr-3 text-xl">🔓</span> Keluar Sistem
                 </button>
             </div>
             <div class="p-6 text-[10px] text-blue-300 italic border-t border-blue-800/30">
@@ -130,8 +149,8 @@
                 <!-- Page: Beranda -->
                 <div id="page-beranda" class="space-y-6 animate-in fade-in duration-500 text-gray-900">
                     <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-10 rounded-3xl shadow-lg text-white">
-                        <h1 class="text-4xl font-black mb-2 text-white">Halo Fami, Selamat Datang!</h1>
-                        <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Resmi Fami Collection.</p>
+                        <h1 class="text-4xl font-black mb-2 text-white">Halo, Selamat Datang!</h1>
+                        <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Fami Collection.</p>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-900">
@@ -143,7 +162,7 @@
                             </div>
                         </div>
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition">
-                            <p class="text-gray-500 font-bold text-xs uppercase tracking-widest mb-4">Jumlah</p>
+                            <p class="text-gray-500 font-bold text-xs uppercase tracking-widest mb-4">Omset Terdaftar</p>
                             <div class="flex items-end justify-between">
                                 <h3 class="text-2xl font-black text-green-600" id="stat-total-revenue">Rp 0</h3>
                                 <span class="bg-green-100 text-green-600 p-2 rounded-lg text-green-600">💰</span>
@@ -189,14 +208,14 @@
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Cari No. Kuitansi</label>
                                 <div class="relative text-gray-900">
                                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">🔍</span>
-                                    <input type="text" id="filter-id" oninput="renderList()" placeholder="FM-0001-2026" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                                    <input type="text" id="filter-id" oninput="renderList()" placeholder="FM-0001" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
                                 </div>
                             </div>
                             <div class="space-y-1 text-gray-900">
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Cari Nama Pelanggan</label>
                                 <div class="relative text-gray-900">
                                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">👤</span>
-                                    <input type="text" id="filter-customer" oninput="renderList()" placeholder="Contoh: UPTSDN 22 TANAH KERAS" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                                    <input type="text" id="filter-customer" oninput="renderList()" placeholder="Contoh: Budi" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
                                 </div>
                             </div>
                         </div>
@@ -328,7 +347,7 @@
 
                 <div class="flex justify-end space-x-4 pt-4 text-gray-900">
                     <button type="button" onclick="closeModal()" class="px-10 py-4 rounded-2xl border-2 border-gray-100 text-gray-400 hover:bg-gray-50 font-bold transition">Batal</button>
-                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase text-white">SIMPAN</button>
+                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase text-white">Simpan Data</button>
                 </div>
             </form>
         </div>
@@ -336,6 +355,36 @@
 
     <!-- Scripts -->
     <script>
+        // Membuat Manifest Web dinamis agar browser mendeteksi sebagai Aplikasi PWA Terinstalasi
+        (function() {
+            const myManifest = {
+                "name": "Fami Collection - Sistem Kuitansi Cloud",
+                "short_name": "Fami Receipt",
+                "description": "Sistem Aplikasi Manajemen Kuitansi Cloud Fami Collection",
+                "start_url": window.location.href,
+                "display": "standalone",
+                "background_color": "#1d4ed8",
+                "theme_color": "#1d4ed8",
+                "orientation": "any",
+                "icons": [
+                    {
+                        "src": "https://iili.io/B6vhnlp.th.png",
+                        "sizes": "192x192",
+                        "type": "image/png"
+                    },
+                    {
+                        "src": "https://iili.io/B6vhnlp.th.png",
+                        "sizes": "512x512",
+                        "type": "image/png"
+                    }
+                ]
+            };
+            const stringManifest = JSON.stringify(myManifest);
+            const blob = new Blob([stringManifest], { type: 'application/json' });
+            const manifestURL = URL.createObjectURL(blob);
+            document.getElementById('manifest-link').setAttribute('href', manifestURL);
+        })();
+
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTcT9PVqNyJCfbnYJXXbLUTmAmkOlfTzE_hxlEzEObuxWkW8nEAE8VXxU0JxeyRSFbxA/exec";
 
         let receipts = [];
@@ -396,7 +445,7 @@
         }
 
         async function syncData() {
-            toggleLoading(true, "SINGKRONISASI");
+            toggleLoading(true, "Memuat Data");
             try {
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
@@ -410,11 +459,11 @@
                     receipts = [];
                 }
                 
-                // Urutkan receipts berdasarkan ID FM-XXXX-YYYY Ascending
+                // Urutkan receipts berdasarkan ID FM-XXXX-YYYY Ascending (FM-0001 di paling atas)
                 receipts.sort((a, b) => a.id.localeCompare(b.id));
 
                 if (receipts.length > 0) {
-                    // Ambil ID tertinggi untuk menentukan nextSequence
+                    // Ambil ID tertinggi untuk menentukan urutan berikutnya (nextSequence)
                     const lastId = [...receipts].sort((a, b) => b.id.localeCompare(a.id))[0].id;
                     const match = lastId.match(/FM-(\d+)-/);
                     if (match) nextSequence = parseInt(match[1]) + 1;
@@ -527,7 +576,7 @@
                 }))
             };
 
-            toggleLoading(true, "Sedang Menyimpan");
+            toggleLoading(true, "Menyimpan ke Cloud...");
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -547,7 +596,6 @@
             }
         };
 
-        // RENDER LIST DENGAN DUA FILTER (ID & NAMA) SERTA SORTING ASCENDING
         function renderList() {
             const list = document.getElementById('receipt-list');
             const searchID = document.getElementById('filter-id').value.toLowerCase();
@@ -637,6 +685,12 @@
             const mLeft = document.getElementById('margin-left').value;
             const mRight = document.getElementById('margin-right').value;
 
+            // Generate format tanggal dan waktu cetak sekarang (real-time)
+            const now = new Date();
+            const formattedTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const formattedDate = formatDisplayDateFull(now.toISOString().split('T')[0]);
+            const printDateTime = `${formattedDate}, ${formattedTime} WIB`;
+
             const pw = window.open('', '_blank');
             const itemsHtml = d.items.map(it => `
                 <tr style="page-break-inside: avoid;">
@@ -653,31 +707,88 @@
                     <title>Nota - ${d.id}</title>
                     <style>
                         @page { size: ${size}; margin: ${mTop}mm ${mRight}mm ${mBottom}mm ${mLeft}mm; }
-                        body { font-family: 'Cambria', serif; color: #333; line-height: 1.2; font-size: 11px; }
+                        body { font-family: 'Cambria', serif; color: #333; line-height: 1.2; font-size: 11px; padding-bottom: 60px; position: relative; }
                         .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-                        .logo-img { height: 45px; margin-right: 12px; }
-                        .logo-text { font-size: 20px; font-weight: 800; color: #1e40af; margin-bottom: 2px; }
-                        .biz-info { font-size: 9px; color: #555; line-height: 1.1; }
+                        .logo-img { height: 65px; width: auto; margin-right: 15px; }
+                        .logo-text { font-size: 26px; font-weight: 800; color: #1e40af; margin-bottom: 2px; }
+                        .biz-info { font-size: 11px; color: #333; line-height: 1.2; margin-bottom: 1px; }
                         .nota-title { color: #1e40af; font-size: 18px; font-weight: 800; text-transform: uppercase; margin: 0; }
                         .divider { border-top: 2px solid #000; margin: 8px 0; }
-                        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; position: relative; z-index: 10; }
                         th { background: #3b82f6; color: white; padding: 6px; text-align: left; font-size: 10px; }
                         .summary-total { font-size: 13px; font-weight: 800; border-top: 1.5px solid #333 !important; }
-                        .footer-section { margin-top: 30px; display: flex; justify-content: space-between; page-break-inside: avoid; }
-                        .sig-block { text-align: center; width: 180px; }
-                        .sig-label { font-weight: 700; margin-bottom: 40px; }
-                        .sig-line { border-bottom: 1px solid #999; }
+                        
+                        /* Printed Watermark styling positioned behind all layout content */
+                        .print-watermark {
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 380px;
+                            opacity: 0.08;
+                            z-index: -1000;
+                            pointer-events: none;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        .print-watermark img {
+                            width: 100%;
+                            height: auto;
+                        }
+
+                        /* Barcode Section Styling (Only Barcode, No Borders, Clean Layout) */
+                        .barcode-container {
+                            margin: 15px 0;
+                            page-break-inside: avoid;
+                            position: relative;
+                            z-index: 10;
+                        }
+                        .barcode-img {
+                            height: 48px;
+                            width: auto;
+                            display: block;
+                        }
+
+                        /* PENGATURAN AREA TANDA TANGAN YANG LEBIH LUAS */
+                        .footer-section { margin-top: 35px; display: flex; justify-content: space-between; page-break-inside: avoid; position: relative; z-index: 10; }
+                        .sig-block { text-align: center; width: 200px; }
+                        .sig-label { font-weight: 700; margin-bottom: 85px; font-size: 11px; } /* Jarak margin-bottom dinaikkan dari 40px ke 85px untuk ruang stempel & ttd */
+                        .sig-line { border-bottom: 1.5px solid #000; } /* Garis lurus dipertebal dan dihitamkan */
+                        .sig-name { font-weight: bold; font-size: 12px; margin-top: 6px; text-transform: uppercase; } /* Tebalkan nama */
+                        
+                        /* Custom Page Print Footer */
+                        .print-footer {
+                            position: fixed;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            border-top: 1.5px solid #000;
+                            padding-top: 6px;
+                            font-size: 8px;
+                            color: #444;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            page-break-inside: avoid;
+                            z-index: 10;
+                        }
                     </style>
                 </head>
                 <body>
+                    <!-- Printed Watermark in background -->
+                    <div class="print-watermark">
+                        <img src="https://iili.io/CjM3XgR.png" onerror="this.onerror=null; this.src='https://iili.io/CjM3XgR.th.png';" alt="Fami Collection Watermark">
+                    </div>
+
                     <div class="header-row">
                         <div style="display:flex"><img src="https://iili.io/B6vhnlp.th.png" class="logo-img">
                             <div>
                                 <div class="logo-text">FAMI COLLECTION</div>
-                                <div class="biz-info" style="font-weight: 700; font-size: 10px;">Jasa Percetakan - Jalan Teluk Bakung, Gurun Panjang Utara</div>
-                                <div class="biz-info">Website: www.famicollection.my.id</div>
-                                <div class="biz-info" style="margin-top: 3px;">Melayani: Fotokopi, Cetak Foto, Cari Tugas, Jasa Ketik, Scan Dokumen, ATK, Jilid, Print, Laminating, Materai, Pulsa dan Paket Internet.</div>
-                                <div class="biz-info">HP: 085355304641 / 082170075994</div>
+                                <div class="biz-info" style="font-weight: 800; font-size: 13px;">Jasa Percetakan - Jalan Teluk Bakung, Gurun Panjang Utara</div>
+                                <div class="biz-info" style="color: #1e40af; font-weight: 800; font-size: 12px;">Website: www.famicollection.my.id</div>
+                                <div class="biz-info" style="margin-top: 3px; font-weight: 600; font-size: 11px;">Melayani: Fotokopi, Cetak Foto, Cari Tugas, Jasa Ketik, Scan Dokumen, ATK, Jilid, Print, Laminating, Dan Materai, Pulsa dan Paket Internet.</div>
+                                <div class="biz-info" style="font-weight: 700; font-size: 11px;">HP: 085355304641 / 082170075994</div>
                             </div>
                         </div>
                         <div style="text-align:right">
@@ -687,11 +798,11 @@
                         </div>
                     </div>
                     <div class="divider"></div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:15px">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px; position: relative; z-index: 10;">
                         <div>
                             <strong>Pelanggan:</strong><br>${d.customer}<br>${d.address || '-'}<br>${d.phone ? 'No. HP: ' + d.phone : ''}
                         </div>
-                        <div style="text-align:right"><strong>Metode Pembayaran:</strong><br>${d.payment}</div>
+                        <div style="text-align:right"><strong>Metode:</strong><br>${d.payment}</div>
                     </div>
                     <table>
                         <thead><tr><th>DESKRIPSI</th><th style="text-align:center">JML</th><th style="text-align:right">SATUAN</th><th style="text-align:right">TOTAL</th></tr></thead>
@@ -700,10 +811,33 @@
                             <tr><td colspan="2"></td><td style="text-align:right; font-weight:700; padding-top:10px">TOTAL:</td><td class="summary-total" style="text-align:right; padding-top:10px">${formatRupiah(d.total)}</td></tr>
                         </tfoot>
                     </table>
-                    ${d.note ? `<div style="font-size:10px; border-top:1px solid #eee; padding-top:5px"><strong>Catatan:</strong> ${d.note}</div>` : ''}
+                    
+                    ${d.note ? `<div style="font-size:10px; border-top:1px solid #eee; padding-top:5px; margin-bottom:5px; position: relative; z-index: 10;"><strong>Catatan:</strong> ${d.note}</div>` : ''}
+                    
+                    <!-- BARCODE TANPA TEKS DESKRIPSI -->
+                    <div class="barcode-container">
+                        <img class="barcode-img" src="https://iili.io/CjGtImx.png" onerror="this.onerror=null; this.src='https://iili.io/CjGtImx.th.png';" alt="Barcode Fami Collection">
+                    </div>
+
+                    <!-- AREA TANDA TANGAN DIPERBARUI -->
                     <div class="footer-section">
-                        <div class="sig-block"><div class="sig-label">Tanda Terima</div><div class="sig-line"></div><div>${d.receiverName || d.customer}</div></div>
-                        <div class="sig-block"><div class="sig-label">Hormat Kami</div><div class="sig-line"></div><div>${d.signer}</div></div>
+                        <div class="sig-block">
+                            <div class="sig-label">Tanda Terima</div>
+                            <div class="sig-line"></div>
+                            <div class="sig-name">${d.receiverName || d.customer}</div>
+                        </div>
+                        <div class="sig-block">
+                            <div class="sig-label">Hormat Kami</div>
+                            <div class="sig-line"></div>
+                            <div class="sig-name">${d.signer}</div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Cetak Tambahan (Paling Bawah dengan Garis Lurus) -->
+                    <div class="print-footer">
+                        <div><strong>No. Kuitansi:</strong> ${d.id} &nbsp;|&nbsp; <strong>Pelanggan:</strong> ${d.customer}</div>
+                        <div style="font-style: italic;">Kuitansi ini dicetak pada Aplikasi Fami Collection</div>
+                        <div><strong>Waktu Cetak:</strong> ${printDateTime}</div>
                     </div>
                 </body>
                 </html>
