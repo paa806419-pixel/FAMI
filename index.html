@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Fami Collection</title>
     
-    <!-- PWA & Layar Penuh Meta Tags (Edge, Chrome, Safari) -->
+    <!-- PWA & Layar Penuh Meta Tags -->
     <meta name="theme-color" content="#1d4ed8">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,13 +15,15 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://iili.io/B6vhnlp.th.png">
+    
+    <!-- Tailwind CSS & Chart.js -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         body { 
             font-family: 'Inter', sans-serif; 
-            /* Mencegah overscroll bounce pada tablet & smartphone */
             overscroll-behavior-y: contain;
         }
         .sidebar-active { background-color: rgba(255, 255, 255, 0.2); border-left: 4px solid white; }
@@ -89,7 +91,7 @@
                     Username atau Sandi salah!
                 </div>
                 <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 transition transform hover:-translate-y-1 active:scale-95 text-white">
-                    MASUK KE APLIKASI
+                    MASUK KE SISTEM
                 </button>
             </form>
             <p class="text-center text-xs text-gray-400">Copyright &copy; 2026 Fami Collection</p>
@@ -176,6 +178,20 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Panel Grafik Beranda -->
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Grafik Omset Pendapatan Bulanan</h3>
+                                <p class="text-xs text-gray-400">Total akumulasi kuitansi yang terdaftar per bulan di tahun berjalan</p>
+                            </div>
+                            <span class="text-xs font-bold uppercase bg-blue-50 text-blue-600 px-3 py-1 rounded-full">Tahun 2026</span>
+                        </div>
+                        <div class="relative w-full h-80">
+                            <canvas id="revenue-chart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Page: Daftar Kuitansi -->
@@ -203,7 +219,7 @@
 
                     <!-- Filter & Add Section -->
                     <div class="flex flex-col lg:flex-row justify-between items-end gap-4 text-gray-900">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 w-full lg:max-w-2xl text-gray-900">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 w-full lg:max-w-3xl text-gray-900">
                             <div class="space-y-1 text-gray-900">
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Cari No. Kuitansi</label>
                                 <div class="relative text-gray-900">
@@ -217,6 +233,18 @@
                                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">👤</span>
                                     <input type="text" id="filter-customer" oninput="resetToPageOneAndRender()" placeholder="Contoh: SDN 22 Tanah Keras" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
                                 </div>
+                            </div>
+                            <!-- Pilihan Batas Baris Data (Dropdown Limit) -->
+                            <div class="space-y-1 text-gray-900">
+                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Baris Per Halaman</label>
+                                <select id="filter-limit" onchange="changeLimit()" class="w-full bg-white border border-gray-200 rounded-2xl py-3 px-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                                    <option value="5">5 Baris</option>
+                                    <option value="10">10 Baris</option>
+                                    <option value="15">15 Baris</option>
+                                    <option value="20">20 Baris</option>
+                                    <option value="50">50 Baris</option>
+                                    <option value="100">100 Baris</option>
+                                </select>
                             </div>
                         </div>
                         <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-bold flex items-center transition transform hover:scale-105 shadow-xl shadow-blue-200 text-white whitespace-nowrap h-12">
@@ -413,10 +441,11 @@
         let receipts = [];
         let nextSequence = 1;
         let activeYear = new Date().getFullYear();
+        let revenueChartInstance = null;
 
         // Pagination State Variables
         let currentPage = 1;
-        const rowsPerPage = 6;
+        let rowsPerPage = 5; // Default data per halaman
 
         const BULAN_INDO = [
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -509,10 +538,12 @@
                 }
                 initApp();
                 renderList();
+                buildRevenueChart(); // Membangun grafik omset bulanan dinamis
             } catch (err) {
                 console.error("Sinkronisasi gagal:", err);
                 receipts = [];
                 renderList();
+                buildRevenueChart();
                 showCustomToastModal("Koneksi Gagal", "Gagal menghubungkan ke server cloud Fami Collection.", "❌");
             } finally {
                 toggleLoading(false);
@@ -642,6 +673,13 @@
             renderList();
         }
 
+        // Mengubah Batas Tampilan Data Per Halaman (Limit Selector)
+        function changeLimit() {
+            rowsPerPage = parseInt(document.getElementById('filter-limit').value) || 5;
+            currentPage = 1;
+            renderList();
+        }
+
         // Navigasi Pagination
         function nextPage() {
             const searchID = document.getElementById('filter-id').value.toLowerCase();
@@ -667,7 +705,7 @@
             }
         }
 
-        // RENDER LIST DENGAN FILTER, SORTING ASCENDING & PAGINATION 6 DATA
+        // RENDER LIST DENGAN FILTER, SORTING ASCENDING & PAGINATION DINAMIS (5, 10, 15, dst)
         function renderList() {
             const list = document.getElementById('receipt-list');
             const searchID = document.getElementById('filter-id').value.toLowerCase();
@@ -691,7 +729,7 @@
             if (currentPage > totalPages) currentPage = totalPages;
             if (currentPage < 1) currentPage = 1;
 
-            // Memotong array data untuk halaman saat ini (Maksimal 6 baris)
+            // Memotong array data untuk halaman saat ini (Maksimal rowsPerPage baris)
             const startIndex = (currentPage - 1) * rowsPerPage;
             const endIndex = startIndex + rowsPerPage;
             const paginatedReceipts = filteredReceipts.slice(startIndex, endIndex);
@@ -727,6 +765,94 @@
                     </td>
                 `;
                 list.appendChild(tr);
+            });
+        }
+
+        // MEMBANGUN GRAFIK OMSET BULANAN DINAMIS PADA DASHBOARD BERANDA
+        function buildRevenueChart() {
+            const ctx = document.getElementById('revenue-chart').getContext('2d');
+            
+            // Siapkan array omset bulanan (12 Bulan)
+            const monthlyRevenue = Array(12).fill(0);
+            
+            // Kumpulkan omset per bulan berdasarkan tanggal transaksi di database
+            receipts.forEach(r => {
+                if (r.date) {
+                    const cleanDate = cleanDateString(r.date);
+                    const parts = cleanDate.split('-');
+                    if (parts.length === 3) {
+                        const monthIndex = parseInt(parts[1]) - 1; // 0 - 11
+                        const total = parseFloat(r.total) || 0;
+                        if (monthIndex >= 0 && monthIndex < 12) {
+                            monthlyRevenue[monthIndex] += total;
+                        }
+                    }
+                }
+            });
+
+            // Hancurkan instansi chart sebelumnya jika sudah ada untuk menghindari crash/overlay render
+            if (revenueChartInstance) {
+                revenueChartInstance.destroy();
+            }
+
+            // Inisialisasi Grafik Batang Chart.js baru dengan desain premium
+            revenueChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: BULAN_INDO,
+                    datasets: [{
+                        label: 'Omset Pendapatan (Rp)',
+                        data: monthlyRevenue,
+                        backgroundColor: 'rgba(59, 130, 246, 0.85)', // Biru Tailwind
+                        borderColor: 'rgb(37, 99, 235)',
+                        borderWidth: 1.5,
+                        borderRadius: 8,
+                        hoverBackgroundColor: 'rgba(29, 78, 216, 0.95)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 14, weight: 'bold' },
+                            padding: 12,
+                            cornerRadius: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + formatRupiah(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                font: { family: 'Inter', size: 10 },
+                                callback: function(value) {
+                                    return value >= 1000000 ? (value / 1000000) + ' Jt' : formatRupiah(value);
+                                }
+                            },
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: { family: 'Inter', size: 10, weight: 'bold' }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
             });
         }
 
@@ -787,10 +913,10 @@
             const pw = window.open('', '_blank');
             const itemsHtml = d.items.map(it => `
                 <tr style="page-break-inside: avoid;">
-                    <td style="border: 1px solid #ddd; padding: 6px 8px;">${it.desc}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px 8px; text-align: center;">${it.qty}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px 8px; text-align: right;">${formatRupiah(it.price)}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px 8px; text-align: right; font-weight: bold;">${formatRupiah(it.sub)}</td>
+                    <td style="border: 1.5px solid #000; padding: 8px 10px;">${it.desc}</td>
+                    <td style="border: 1.5px solid #000; padding: 8px 10px; text-align: center;">${it.qty}</td>
+                    <td style="border: 1.5px solid #000; padding: 8px 10px; text-align: right;">${formatRupiah(it.price)}</td>
+                    <td style="border: 1.5px solid #000; padding: 8px 10px; text-align: right; font-weight: bold;">${formatRupiah(it.sub)}</td>
                 </tr>
             `).join('');
 
@@ -800,16 +926,18 @@
                     <title>Nota - ${d.id}</title>
                     <style>
                         @page { size: ${size}; margin: ${mTop}mm ${mRight}mm ${mBottom}mm ${mLeft}mm; }
-                        body { font-family: 'Cambria', serif; color: #333; line-height: 1.2; font-size: 11px; padding-bottom: 60px; position: relative; }
+                        body { font-family: 'Cambria', serif; color: #000; line-height: 1.2; font-size: 11px; padding-bottom: 60px; position: relative; }
                         .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
                         .logo-img { height: 65px; width: auto; margin-right: 15px; }
                         .logo-text { font-size: 26px; font-weight: 800; color: #1e40af; margin-bottom: 2px; }
-                        .biz-info { font-size: 11px; color: #333; line-height: 1.2; margin-bottom: 1px; }
+                        .biz-info { font-size: 11px; color: #111; line-height: 1.2; margin-bottom: 1px; }
                         .nota-title { color: #1e40af; font-size: 18px; font-weight: 800; text-transform: uppercase; margin: 0; }
                         .divider { border-top: 2px solid #000; margin: 8px 0; }
-                        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; position: relative; z-index: 10; }
-                        th { background: #3b82f6; color: white; padding: 6px; text-align: left; font-size: 10px; }
-                        .summary-total { font-size: 13px; font-weight: 800; border-top: 1.5px solid #333 !important; }
+                        
+                        /* Rangkaian Tabel Cetak: Garis Hitam Tebal Terang, Kepala Tabel Biru Navy */
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; position: relative; z-index: 10; border: 1.5px solid #000; }
+                        th { background: #1e40af !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; color: white !important; padding: 8px; text-align: left; font-size: 11px; border: 1.5px solid #000; font-weight: bold; }
+                        .summary-total { font-size: 13px; font-weight: 800; border-top: 1.5px solid #000 !important; }
                         
                         /* Printed Watermark styling positioned behind all layout content */
                         .print-watermark {
@@ -846,7 +974,7 @@
                         /* PENGATURAN AREA TANDA TANGAN YANG LEBIH LUAS */
                         .footer-section { margin-top: 35px; display: flex; justify-content: space-between; page-break-inside: avoid; position: relative; z-index: 10; }
                         .sig-block { text-align: center; width: 200px; }
-                        .sig-label { font-weight: 700; margin-bottom: 85px; font-size: 11px; } /* Jarak margin-bottom dinaikkan dari 40px ke 85px untuk ruang stempel & ttd */
+                        .sig-label { font-weight: 700; margin-bottom: 85px; font-size: 11px; } /* Jarak margin-bottom luas untuk ruang stempel & ttd */
                         .sig-line { border-bottom: 1.5px solid #000; } /* Garis lurus dipertebal dan dihitamkan */
                         .sig-name { font-weight: bold; font-size: 12px; margin-top: 6px; text-transform: uppercase; } /* Tebalkan nama */
                         
@@ -880,7 +1008,7 @@
                                 <div class="logo-text">FAMI COLLECTION</div>
                                 <div class="biz-info" style="font-weight: 800; font-size: 13px;">Jasa Percetakan - Jalan Teluk Bakung, Gurun Panjang Utara</div>
                                 <div class="biz-info" style="color: #1e40af; font-weight: 800; font-size: 12px;">Website: www.famicollection.my.id</div>
-                                <div class="biz-info" style="margin-top: 3px; font-weight: 600; font-size: 11px;">Melayani: Fotokopi, Cetak Foto, Cari Tugas, Jasa Ketik, Scan Dokumen, ATK, Jilid, Print, Laminating, Dan Materai, Pulsa dan Paket Internet.</div>
+                                <div class="biz-info" style="margin-top: 3px; font-weight: 600; font-size: 11px;">Melayani: Fotokopi, Cetak Foto, Cari Tugas, Jasa Ketik, Scan Dokumen, ATK, Jilid, Print, Laminating, Materai, Pulsa dan Paket Internet.</div>
                                 <div class="biz-info" style="font-weight: 700; font-size: 11px;">HP: 085355304641 / 082170075994</div>
                             </div>
                         </div>
@@ -897,15 +1025,27 @@
                         </div>
                         <div style="text-align:right"><strong>Metode:</strong><br>${d.payment}</div>
                     </div>
+                    
                     <table>
-                        <thead><tr><th>DESKRIPSI</th><th style="text-align:center">JML</th><th style="text-align:right">SATUAN</th><th style="text-align:right">TOTAL</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th>DESKRIPSI</th>
+                                <th style="text-align:center; width: 60px;">JML</th>
+                                <th style="text-align:right; width: 150px;">SATUAN</th>
+                                <th style="text-align:right; width: 150px;">TOTAL</th>
+                            </tr>
+                        </thead>
                         <tbody>${itemsHtml}</tbody>
                         <tfoot>
-                            <tr><td colspan="2"></td><td style="text-align:right; font-weight:700; padding-top:10px">TOTAL:</td><td class="summary-total" style="text-align:right; padding-top:10px">${formatRupiah(d.total)}</td></tr>
+                            <tr>
+                                <td colspan="2" style="border: 1.5px solid #000;"></td>
+                                <td style="text-align:right; font-weight:700; padding: 10px; border: 1.5px solid #000;">TOTAL:</td>
+                                <td class="summary-total" style="text-align:right; padding: 10px; border: 1.5px solid #000;">${formatRupiah(d.total)}</td>
+                            </tr>
                         </tfoot>
                     </table>
                     
-                    ${d.note ? `<div style="font-size:10px; border-top:1px solid #eee; padding-top:5px; margin-bottom:5px; position: relative; z-index: 10;"><strong>Catatan:</strong> ${d.note}</div>` : ''}
+                    ${d.note ? `<div style="font-size:10px; border-top:1px solid #ccc; padding-top:5px; margin-bottom:5px; position: relative; z-index: 10;"><strong>Catatan:</strong> ${d.note}</div>` : ''}
                     
                     <!-- BARCODE TANPA TEKS DESKRIPSI -->
                     <div class="barcode-container">
