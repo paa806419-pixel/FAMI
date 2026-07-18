@@ -89,7 +89,7 @@
                     Username atau Sandi salah!
                 </div>
                 <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 transition transform hover:-translate-y-1 active:scale-95 text-white">
-                    MASUK
+                    MASUK KE APLIKASI
                 </button>
             </form>
             <p class="text-center text-xs text-gray-400">Copyright &copy; 2026 Fami Collection</p>
@@ -208,14 +208,14 @@
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Cari No. Kuitansi</label>
                                 <div class="relative text-gray-900">
                                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">🔍</span>
-                                    <input type="text" id="filter-id" oninput="renderList()" placeholder="FM-0001" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                                    <input type="text" id="filter-id" oninput="resetToPageOneAndRender()" placeholder="FM-0001" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
                                 </div>
                             </div>
                             <div class="space-y-1 text-gray-900">
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Cari Nama Pelanggan</label>
                                 <div class="relative text-gray-900">
                                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">👤</span>
-                                    <input type="text" id="filter-customer" oninput="renderList()" placeholder="Contoh: UPT SDN 22 Tanah Keras" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                                    <input type="text" id="filter-customer" oninput="resetToPageOneAndRender()" placeholder="Contoh: SDN 22 Tanah Keras" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
                                 </div>
                             </div>
                         </div>
@@ -224,6 +224,7 @@
                         </button>
                     </div>
 
+                    <!-- Receipt Table with Integrated Pagination -->
                     <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-gray-100 text-gray-900">
                         <table class="w-full text-left border-collapse text-gray-900">
                             <thead>
@@ -237,6 +238,18 @@
                             </thead>
                             <tbody id="receipt-list" class="divide-y divide-gray-50 text-gray-900"></tbody>
                         </table>
+                        
+                        <!-- Pagination Controls (Selanjutnya & Sebelum) -->
+                        <div class="flex items-center justify-between px-8 py-5 border-t border-gray-100 bg-gray-50/50 no-print">
+                            <button id="btn-prev" onclick="prevPage()" class="px-5 py-2.5 bg-white border border-gray-200 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-50 active:scale-95 transition-all shadow-sm disabled:opacity-40 disabled:pointer-events-none flex items-center space-x-1">
+                                <span>⬅️</span> <span>Sebelumnya</span>
+                            </button>
+                            <span id="page-indicator" class="text-sm font-bold text-gray-600">Halaman 1 dari 1</span>
+                            <button id="btn-next" onclick="nextPage()" class="px-5 py-2.5 bg-white border border-gray-200 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-50 active:scale-95 transition-all shadow-sm disabled:opacity-40 disabled:pointer-events-none flex items-center space-x-1">
+                                <span>Selanjutnya</span> <span>➡️</span>
+                            </button>
+                        </div>
+
                         <div id="empty-state" class="p-20 text-center hidden flex flex-col items-center text-gray-900">
                             <div class="text-6xl mb-4 opacity-20 text-gray-400 text-gray-900">📄</div>
                             <p class="text-gray-400 font-medium italic text-gray-900">Data tidak ditemukan.</p>
@@ -353,12 +366,22 @@
         </div>
     </div>
 
+    <!-- Custom Notification Box (Anti-alert Dialog) -->
+    <div id="toast-modal" class="fixed inset-0 bg-gray-950/50 backdrop-blur-sm z-[600] flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-8 text-center space-y-4">
+            <div id="toast-modal-icon" class="text-4xl">⚠️</div>
+            <h4 id="toast-modal-title" class="text-lg font-bold text-gray-800">Informasi</h4>
+            <p id="toast-modal-message" class="text-sm text-gray-500"></p>
+            <button onclick="closeToastModal()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition">Ok, Mengerti</button>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
         // Membuat Manifest Web dinamis agar browser mendeteksi sebagai Aplikasi PWA Terinstalasi
         (function() {
             const myManifest = {
-                "name": "Fami Collection - Sistem Kuitansi",
+                "name": "Fami Collection - Sistem Kuitansi Digital",
                 "short_name": "Fami Receipt",
                 "description": "Sistem Aplikasi Manajemen Kuitansi Fami Collection",
                 "start_url": window.location.href,
@@ -391,6 +414,10 @@
         let nextSequence = 1;
         let activeYear = new Date().getFullYear();
 
+        // Pagination State Variables
+        let currentPage = 1;
+        const rowsPerPage = 6;
+
         const BULAN_INDO = [
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
@@ -422,6 +449,18 @@
                 return `${tgl} ${bln} ${thn}`;
             }
             return clean;
+        }
+
+        // Helper untuk memicu Dialog Box Kustom pengganti alert()
+        function showCustomToastModal(title, message, icon = "⚠️") {
+            document.getElementById('toast-modal-title').innerText = title;
+            document.getElementById('toast-modal-message').innerText = message;
+            document.getElementById('toast-modal-icon').innerText = icon;
+            document.getElementById('toast-modal').classList.remove('hidden');
+        }
+
+        function closeToastModal() {
+            document.getElementById('toast-modal').classList.add('hidden');
         }
 
         // Login Logic
@@ -474,6 +513,7 @@
                 console.error("Sinkronisasi gagal:", err);
                 receipts = [];
                 renderList();
+                showCustomToastModal("Koneksi Gagal", "Gagal menghubungkan ke server cloud Fami Collection.", "❌");
             } finally {
                 toggleLoading(false);
             }
@@ -590,12 +630,44 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert("Gagal menyimpan data.");
+                showCustomToastModal("Gagal Menyimpan", "Gagal menyimpan data kuitansi ke Cloud database.", "⚠️");
             } finally {
                 toggleLoading(false);
             }
         };
 
+        // Reset Halaman Saat Input Filter Berubah
+        function resetToPageOneAndRender() {
+            currentPage = 1;
+            renderList();
+        }
+
+        // Navigasi Pagination
+        function nextPage() {
+            const searchID = document.getElementById('filter-id').value.toLowerCase();
+            const searchCustomer = document.getElementById('filter-customer').value.toLowerCase();
+            
+            let sortedReceipts = [...receipts].sort((a, b) => a.id.localeCompare(b.id));
+            let filteredReceipts = sortedReceipts.filter(r => 
+                r.id.toLowerCase().includes(searchID) && 
+                r.customer.toLowerCase().includes(searchCustomer)
+            );
+            
+            const totalPages = Math.ceil(filteredReceipts.length / rowsPerPage) || 1;
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderList();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderList();
+            }
+        }
+
+        // RENDER LIST DENGAN FILTER, SORTING ASCENDING & PAGINATION 6 DATA
         function renderList() {
             const list = document.getElementById('receipt-list');
             const searchID = document.getElementById('filter-id').value.toLowerCase();
@@ -611,14 +683,35 @@
                 r.customer.toLowerCase().includes(searchCustomer)
             );
 
-            if (!filteredReceipts || filteredReceipts.length === 0) {
+            // Perhitungan Pagination
+            const totalItems = filteredReceipts.length;
+            const totalPages = Math.ceil(totalItems / rowsPerPage) || 1;
+            
+            // Validasi currentPage agar tidak out-of-bounds
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            // Memotong array data untuk halaman saat ini (Maksimal 6 baris)
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const paginatedReceipts = filteredReceipts.slice(startIndex, endIndex);
+
+            // Update Page Indicator dan Status Tombol
+            document.getElementById('page-indicator').innerText = `Halaman ${currentPage} dari ${totalPages}`;
+            document.getElementById('btn-prev').disabled = (currentPage === 1);
+            document.getElementById('btn-next').disabled = (currentPage === totalPages);
+
+            if (!paginatedReceipts || paginatedReceipts.length === 0) {
                 document.getElementById('empty-state').classList.remove('hidden');
+                // Sembunyikan navigasi halaman jika data kosong
+                document.getElementById('btn-prev').disabled = true;
+                document.getElementById('btn-next').disabled = true;
                 return;
             }
             
             document.getElementById('empty-state').classList.add('hidden');
 
-            filteredReceipts.forEach((r) => {
+            paginatedReceipts.forEach((r) => {
                 const originalIdx = receipts.findIndex(item => item.id === r.id);
                 
                 const tr = document.createElement('tr');
