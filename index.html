@@ -58,7 +58,7 @@
             <!-- Centered Stationary Logo inside rotating ring -->
             <img src="https://iili.io/CjM3XgR.png" onerror="this.onerror=null; this.src='https://iili.io/CjM3XgR.th.png';" class="absolute w-12 h-12 object-contain p-1 rounded-full bg-white/90 shadow-sm" alt="Sync Logo">
         </div>
-        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">Menghubungkan ke Cloud...</p>
+        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">Memuat Data</p>
     </div>
 
     <!-- Login Page -->
@@ -253,7 +253,7 @@
             <div class="p-8 border-b sticky top-0 bg-white/90 backdrop-blur-md z-10 flex justify-between items-center rounded-t-3xl text-gray-900">
                 <div>
                     <h2 id="modal-title" class="text-3xl font-black text-gray-800 text-gray-900">Buat Kuitansi Baru</h2>
-                    <p class="text-gray-500 text-sm text-gray-900">Lengkapi detail transaksi untuk disimpan ke Cloud.</p>
+                    <p class="text-gray-500 text-sm text-gray-900">Lengkapi detail transaksi.</p>
                 </div>
                 <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all text-3xl font-light text-gray-900">&times;</button>
             </div>
@@ -358,9 +358,9 @@
         // Membuat Manifest Web dinamis agar browser mendeteksi sebagai Aplikasi PWA Terinstalasi
         (function() {
             const myManifest = {
-                "name": "Fami Collection - Sistem Kuitansi Cloud",
+                "name": "Fami Collection - Sistem Kuitansi",
                 "short_name": "Fami Receipt",
-                "description": "Sistem Aplikasi Manajemen Kuitansi Cloud Fami Collection",
+                "description": "Sistem Aplikasi Manajemen Kuitansi Fami Collection",
                 "start_url": window.location.href,
                 "display": "standalone",
                 "background_color": "#1d4ed8",
@@ -479,7 +479,7 @@
             }
         }
 
-        function toggleLoading(show, text = "Menghubungkan ke Cloud...") {
+        function toggleLoading(show, text = "Menyimpan Data") {
             document.getElementById('loading-text').innerText = text;
             document.getElementById('loading-overlay').classList.toggle('hidden', !show);
         }
