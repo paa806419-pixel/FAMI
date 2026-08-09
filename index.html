@@ -60,7 +60,7 @@
             <!-- Centered Stationary Logo inside rotating ring -->
             <img src="https://iili.io/CjM3XgR.png" onerror="this.onerror=null; this.src='https://iili.io/CjM3XgR.th.png';" class="absolute w-12 h-12 object-contain p-1 rounded-full bg-white/90 shadow-sm" alt="Sync Logo">
         </div>
-        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">Memuat Data</p>
+        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">Menghubungkan ke Cloud...</p>
     </div>
 
     <!-- Login Page -->
@@ -81,11 +81,11 @@
             <form id="login-form" class="space-y-6">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Username</label>
-                    <input type="text" id="login-username" required placeholder="....." class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900">
+                    <input type="text" id="login-username" required placeholder="*****" class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Kata Sandi</label>
-                    <input type="password" id="login-password" required placeholder="....." class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium tracking-widest text-gray-900">
+                    <input type="password" id="login-password" required placeholder="*****" class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium tracking-widest text-gray-900">
                 </div>
                 <div id="login-error" class="hidden text-red-500 text-sm font-bold text-center bg-red-50 p-3 rounded-xl">
                     Username atau Sandi salah!
@@ -231,7 +231,7 @@
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Cari Nama Pelanggan</label>
                                 <div class="relative text-gray-900">
                                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">👤</span>
-                                    <input type="text" id="filter-customer" oninput="resetToPageOneAndRender()" placeholder="Contoh: SDN 22 Tanah Keras" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                                    <input type="text" id="filter-customer" oninput="resetToPageOneAndRender()" placeholder="Contoh: Budi" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
                                 </div>
                             </div>
                             <!-- Pilihan Batas Baris Data (Dropdown Limit) -->
@@ -267,7 +267,7 @@
                             <tbody id="receipt-list" class="divide-y divide-gray-50 text-gray-900"></tbody>
                         </table>
                         
-                        <!-- Pagination Controls (Selanjutnya & Sebelum) -->
+                        <!-- Pagination Controls -->
                         <div class="flex items-center justify-between px-8 py-5 border-t border-gray-100 bg-gray-50/50 no-print">
                             <button id="btn-prev" onclick="prevPage()" class="px-5 py-2.5 bg-white border border-gray-200 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-50 active:scale-95 transition-all shadow-sm disabled:opacity-40 disabled:pointer-events-none flex items-center space-x-1">
                                 <span>⬅️</span> <span>Sebelumnya</span>
@@ -294,7 +294,7 @@
             <div class="p-8 border-b sticky top-0 bg-white/90 backdrop-blur-md z-10 flex justify-between items-center rounded-t-3xl text-gray-900">
                 <div>
                     <h2 id="modal-title" class="text-3xl font-black text-gray-800 text-gray-900">Buat Kuitansi Baru</h2>
-                    <p class="text-gray-500 text-sm text-gray-900">Lengkapi detail transaksi.</p>
+                    <p class="text-gray-500 text-sm text-gray-900">Lengkapi detail transaksi untuk disimpan ke Cloud.</p>
                 </div>
                 <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all text-3xl font-light text-gray-900">&times;</button>
             </div>
@@ -353,13 +353,14 @@
                         <button type="button" onclick="addItemRow()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-xl font-bold text-sm transition shadow-lg shadow-green-100 transform active:scale-95 text-white">+ Tambah Baris</button>
                     </div>
                     <div class="overflow-x-auto rounded-2xl border border-gray-100 bg-gray-50/30 text-gray-900">
-                        <table class="w-full min-w-[800px] text-gray-900">
+                        <table class="w-full min-w-[850px] text-gray-900">
                             <thead class="text-gray-400 text-xs uppercase font-black text-gray-900">
                                 <tr>
                                     <th class="p-5 text-left">Deskripsi Produk/Jasa</th>
                                     <th class="p-5 text-center w-24">Jml</th>
-                                    <th class="p-5 text-right w-56">Harga Satuan (Rp)</th>
-                                    <th class="p-5 text-right w-56">Total</th>
+                                    <th class="p-5 text-center w-36">Satuan</th>
+                                    <th class="p-5 text-right w-48">Harga Satuan (Rp)</th>
+                                    <th class="p-5 text-right w-48">Total</th>
                                     <th class="p-5 w-16"></th>
                                 </tr>
                             </thead>
@@ -388,7 +389,7 @@
 
                 <div class="flex justify-end space-x-4 pt-4 text-gray-900">
                     <button type="button" onclick="closeModal()" class="px-10 py-4 rounded-2xl border-2 border-gray-100 text-gray-400 hover:bg-gray-50 font-bold transition">Batal</button>
-                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase text-white">Simpan Data</button>
+                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase text-white">Simpan Data Ke Cloud</button>
                 </div>
             </form>
         </div>
@@ -406,12 +407,12 @@
 
     <!-- Scripts -->
     <script>
-        // Membuat Manifest Web dinamis agar browser mendeteksi sebagai Aplikasi PWA Terinstalasi
+        // Membuat Manifest Web dinamis
         (function() {
             const myManifest = {
-                "name": "Fami Collection - Sistem Kuitansi Digital",
+                "name": "Fami Collection - Sistem Kuitansi Cloud",
                 "short_name": "Fami Receipt",
-                "description": "Sistem Aplikasi Manajemen Kuitansi Fami Collection",
+                "description": "Sistem Aplikasi Manajemen Kuitansi Cloud Fami Collection",
                 "start_url": window.location.href,
                 "display": "standalone",
                 "background_color": "#1d4ed8",
@@ -436,7 +437,7 @@
             document.getElementById('manifest-link').setAttribute('href', manifestURL);
         })();
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTcT9PVqNyJCfbnYJXXbLUTmAmkOlfTzE_hxlEzEObuxWkW8nEAE8VXxU0JxeyRSFbxA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0JynOCd9Hgll6W3DgQcDHX8g8_oDU3eAhHevEM9vBCz9liC7VoevJQ_PLcqtnqrgGfg/exec";
 
         let receipts = [];
         let nextSequence = 1;
@@ -445,11 +446,18 @@
 
         // Pagination State Variables
         let currentPage = 1;
-        let rowsPerPage = 5; // Default data per halaman
+        let rowsPerPage = 5;
 
         const BULAN_INDO = [
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+
+        // Daftar Pilihan Satuan Resmi
+        const LIST_SATUAN = [
+            "Buah", "Pcs", "Rim", "Kotak / Box", "Pak", "Lusin", "Orang", 
+            "Bulan", "Set", "Dus", "Paket", "Hari", "Tahun", "Sachet", 
+            "Meter", "Centimeter", "Kodi", "Batang", "Rol", "Unit", "Lembar", "Botol"
         ];
 
         function cleanDateString(dateStr) {
@@ -480,7 +488,6 @@
             return clean;
         }
 
-        // Helper untuk memicu Dialog Box Kustom pengganti alert()
         function showCustomToastModal(title, message, icon = "⚠️") {
             document.getElementById('toast-modal-title').innerText = title;
             document.getElementById('toast-modal-message').innerText = message;
@@ -513,7 +520,7 @@
         }
 
         async function syncData() {
-            toggleLoading(true, "Memuat Data");
+            toggleLoading(true, "Sinkronisasi Cloud...");
             try {
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
@@ -527,18 +534,16 @@
                     receipts = [];
                 }
                 
-                // Urutkan receipts berdasarkan ID FM-XXXX-YYYY Ascending (FM-0001 di paling atas)
                 receipts.sort((a, b) => a.id.localeCompare(b.id));
 
                 if (receipts.length > 0) {
-                    // Ambil ID tertinggi untuk menentukan urutan berikutnya (nextSequence)
                     const lastId = [...receipts].sort((a, b) => b.id.localeCompare(a.id))[0].id;
                     const match = lastId.match(/FM-(\d+)-/);
                     if (match) nextSequence = parseInt(match[1]) + 1;
                 }
                 initApp();
                 renderList();
-                buildRevenueChart(); // Membangun grafik omset bulanan dinamis
+                buildRevenueChart();
             } catch (err) {
                 console.error("Sinkronisasi gagal:", err);
                 receipts = [];
@@ -550,7 +555,7 @@
             }
         }
 
-        function toggleLoading(show, text = "Menyimpan Data") {
+        function toggleLoading(show, text = "Menghubungkan ke Cloud...") {
             document.getElementById('loading-text').innerText = text;
             document.getElementById('loading-overlay').classList.toggle('hidden', !show);
         }
@@ -593,15 +598,25 @@
             document.body.style.overflow = 'auto';
         }
 
-        function addItemRow(desc = '', qty = 1, price = 0) {
+        // FUNGSI TAMBAH BARIS ITEM DENGAN PILIHAN SATUAN
+        function addItemRow(desc = '', qty = 1, unit = 'Pcs', price = 0) {
             const tr = document.createElement('tr');
             tr.className = "group hover:bg-white transition-colors text-gray-900";
+            
+            // Generate dropdown HTML pilihan satuan
+            const unitOptionsHtml = LIST_SATUAN.map(u => `<option value="${u}" ${u === unit ? 'selected' : ''}>${u}</option>`).join('');
+
             tr.innerHTML = `
                 <td class="p-4"><input type="text" value="${desc}" placeholder="Deskripsi item" class="item-desc w-full border rounded-xl p-3 font-medium text-gray-900" required></td>
                 <td class="p-4 w-24"><input type="number" value="${qty}" min="1" class="item-qty w-full border rounded-xl p-3 text-center font-bold text-gray-900" oninput="calculate()"></td>
-                <td class="p-4 w-56"><input type="number" value="${price}" placeholder="0" class="item-price w-full border rounded-xl p-3 text-right font-bold text-gray-900" oninput="calculate()"></td>
+                <td class="p-4 w-36">
+                    <select class="item-unit w-full border rounded-xl p-3 text-center font-medium text-gray-900 bg-white focus:outline-none focus:border-blue-500">
+                        ${unitOptionsHtml}
+                    </select>
+                </td>
+                <td class="p-4 w-48"><input type="number" value="${price}" placeholder="0" class="item-price w-full border rounded-xl p-3 text-right font-bold text-gray-900" oninput="calculate()"></td>
                 <td class="p-4 text-right font-black text-blue-700 item-total text-gray-900">Rp 0</td>
-                <td class="p-4 text-center"><button type="button" onclick="this.closest('tr').remove(); calculate()" class="text-red-400 text-2xl text-red-400">&times;</button></td>
+                <td class="p-4 text-center"><button type="button" onclick="this.closest('tr').remove(); calculate()" class="text-red-400 text-2xl hover:text-red-600 transition">&times;</button></td>
             `;
             document.getElementById('item-rows').appendChild(tr);
             calculate();
@@ -642,6 +657,7 @@
                 items: Array.from(document.querySelectorAll('#item-rows tr')).map(r => ({
                     desc: r.querySelector('.item-desc').value,
                     qty: r.querySelector('.item-qty').value,
+                    unit: r.querySelector('.item-unit').value || 'Pcs',
                     price: r.querySelector('.item-price').value,
                     sub: parseFloat(r.querySelector('.item-qty').value) * parseFloat(r.querySelector('.item-price').value)
                 }))
@@ -667,20 +683,17 @@
             }
         };
 
-        // Reset Halaman Saat Input Filter Berubah
         function resetToPageOneAndRender() {
             currentPage = 1;
             renderList();
         }
 
-        // Mengubah Batas Tampilan Data Per Halaman (Limit Selector)
         function changeLimit() {
             rowsPerPage = parseInt(document.getElementById('filter-limit').value) || 5;
             currentPage = 1;
             renderList();
         }
 
-        // Navigasi Pagination
         function nextPage() {
             const searchID = document.getElementById('filter-id').value.toLowerCase();
             const searchCustomer = document.getElementById('filter-customer').value.toLowerCase();
@@ -705,43 +718,35 @@
             }
         }
 
-        // RENDER LIST DENGAN FILTER, SORTING ASCENDING & PAGINATION DINAMIS (5, 10, 15, dst)
         function renderList() {
             const list = document.getElementById('receipt-list');
             const searchID = document.getElementById('filter-id').value.toLowerCase();
             const searchCustomer = document.getElementById('filter-customer').value.toLowerCase();
             list.innerHTML = '';
             
-            // Pengurutan Ascending (ID FM-0001 akan muncul pertama)
             let sortedReceipts = [...receipts].sort((a, b) => a.id.localeCompare(b.id));
 
-            // Filter data menggunakan logika AND (Harus cocok dengan kedua filter jika diisi)
             let filteredReceipts = sortedReceipts.filter(r => 
                 r.id.toLowerCase().includes(searchID) && 
                 r.customer.toLowerCase().includes(searchCustomer)
             );
 
-            // Perhitungan Pagination
             const totalItems = filteredReceipts.length;
             const totalPages = Math.ceil(totalItems / rowsPerPage) || 1;
             
-            // Validasi currentPage agar tidak out-of-bounds
             if (currentPage > totalPages) currentPage = totalPages;
             if (currentPage < 1) currentPage = 1;
 
-            // Memotong array data untuk halaman saat ini (Maksimal rowsPerPage baris)
             const startIndex = (currentPage - 1) * rowsPerPage;
             const endIndex = startIndex + rowsPerPage;
             const paginatedReceipts = filteredReceipts.slice(startIndex, endIndex);
 
-            // Update Page Indicator dan Status Tombol
             document.getElementById('page-indicator').innerText = `Halaman ${currentPage} dari ${totalPages}`;
             document.getElementById('btn-prev').disabled = (currentPage === 1);
             document.getElementById('btn-next').disabled = (currentPage === totalPages);
 
             if (!paginatedReceipts || paginatedReceipts.length === 0) {
                 document.getElementById('empty-state').classList.remove('hidden');
-                // Sembunyikan navigasi halaman jika data kosong
                 document.getElementById('btn-prev').disabled = true;
                 document.getElementById('btn-next').disabled = true;
                 return;
@@ -768,20 +773,16 @@
             });
         }
 
-        // MEMBANGUN GRAFIK OMSET BULANAN DINAMIS PADA DASHBOARD BERANDA
         function buildRevenueChart() {
             const ctx = document.getElementById('revenue-chart').getContext('2d');
-            
-            // Siapkan array omset bulanan (12 Bulan)
             const monthlyRevenue = Array(12).fill(0);
             
-            // Kumpulkan omset per bulan berdasarkan tanggal transaksi di database
             receipts.forEach(r => {
                 if (r.date) {
                     const cleanDate = cleanDateString(r.date);
                     const parts = cleanDate.split('-');
                     if (parts.length === 3) {
-                        const monthIndex = parseInt(parts[1]) - 1; // 0 - 11
+                        const monthIndex = parseInt(parts[1]) - 1;
                         const total = parseFloat(r.total) || 0;
                         if (monthIndex >= 0 && monthIndex < 12) {
                             monthlyRevenue[monthIndex] += total;
@@ -790,12 +791,10 @@
                 }
             });
 
-            // Hancurkan instansi chart sebelumnya jika sudah ada untuk menghindari crash/overlay render
             if (revenueChartInstance) {
                 revenueChartInstance.destroy();
             }
 
-            // Inisialisasi Grafik Batang Chart.js baru dengan desain premium
             revenueChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -803,7 +802,7 @@
                     datasets: [{
                         label: 'Omset Pendapatan (Rp)',
                         data: monthlyRevenue,
-                        backgroundColor: 'rgba(59, 130, 246, 0.85)', // Biru Tailwind
+                        backgroundColor: 'rgba(59, 130, 246, 0.85)',
                         borderColor: 'rgb(37, 99, 235)',
                         borderWidth: 1.5,
                         borderRadius: 8,
@@ -814,9 +813,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: false },
                         tooltip: {
                             backgroundColor: '#1e293b',
                             titleFont: { size: 12, weight: 'bold' },
@@ -839,17 +836,11 @@
                                     return value >= 1000000 ? (value / 1000000) + ' Jt' : formatRupiah(value);
                                 }
                             },
-                            grid: {
-                                color: '#f1f5f9'
-                            }
+                            grid: { color: '#f1f5f9' }
                         },
                         x: {
-                            ticks: {
-                                font: { family: 'Inter', size: 10, weight: 'bold' }
-                            },
-                            grid: {
-                                display: false
-                            }
+                            ticks: { font: { family: 'Inter', size: 10, weight: 'bold' } },
+                            grid: { display: false }
                         }
                     }
                 }
@@ -887,7 +878,7 @@
             
             document.getElementById('item-rows').innerHTML = '';
             if (r.items && r.items.length > 0) {
-                r.items.forEach(it => addItemRow(it.desc, it.qty, it.price));
+                r.items.forEach(it => addItemRow(it.desc, it.qty, it.unit || 'Pcs', it.price));
             } else {
                 addItemRow();
             }
@@ -904,22 +895,23 @@
             const mLeft = document.getElementById('margin-left').value;
             const mRight = document.getElementById('margin-right').value;
 
-            // Generate format tanggal dan waktu cetak sekarang (real-time)
             const now = new Date();
             const formattedTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const formattedDate = formatDisplayDateFull(now.toISOString().split('T')[0]);
             const printDateTime = `${formattedDate}, ${formattedTime} WIB`;
 
-            const pw = window.open('', '_blank');
+            // Cetak Baris Item dengan Kolom Satuan Ditampilkan
             const itemsHtml = d.items.map(it => `
                 <tr style="page-break-inside: avoid;">
                     <td style="border: 1.5px solid #000; padding: 8px 10px;">${it.desc}</td>
                     <td style="border: 1.5px solid #000; padding: 8px 10px; text-align: center;">${it.qty}</td>
+                    <td style="border: 1.5px solid #000; padding: 8px 10px; text-align: center;">${it.unit || 'Pcs'}</td>
                     <td style="border: 1.5px solid #000; padding: 8px 10px; text-align: right;">${formatRupiah(it.price)}</td>
                     <td style="border: 1.5px solid #000; padding: 8px 10px; text-align: right; font-weight: bold;">${formatRupiah(it.sub)}</td>
                 </tr>
             `).join('');
 
+            const pw = window.open('', '_blank');
             pw.document.write(`
                 <html>
                 <head>
@@ -934,12 +926,10 @@
                         .nota-title { color: #1e40af; font-size: 18px; font-weight: 800; text-transform: uppercase; margin: 0; }
                         .divider { border-top: 2px solid #000; margin: 8px 0; }
                         
-                        /* Rangkaian Tabel Cetak: Garis Hitam Tebal Terang, Kepala Tabel Biru Navy */
                         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; position: relative; z-index: 10; border: 1.5px solid #000; }
                         th { background: #1e40af !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; color: white !important; padding: 8px; text-align: left; font-size: 11px; border: 1.5px solid #000; font-weight: bold; }
                         .summary-total { font-size: 13px; font-weight: 800; border-top: 1.5px solid #000 !important; }
                         
-                        /* Printed Watermark styling positioned behind all layout content */
                         .print-watermark {
                             position: fixed;
                             top: 50%;
@@ -958,7 +948,6 @@
                             height: auto;
                         }
 
-                        /* Barcode Section Styling (Only Barcode, No Borders, Clean Layout) */
                         .barcode-container {
                             margin: 15px 0;
                             page-break-inside: avoid;
@@ -971,14 +960,12 @@
                             display: block;
                         }
 
-                        /* PENGATURAN AREA TANDA TANGAN YANG LEBIH LUAS */
                         .footer-section { margin-top: 35px; display: flex; justify-content: space-between; page-break-inside: avoid; position: relative; z-index: 10; }
                         .sig-block { text-align: center; width: 200px; }
-                        .sig-label { font-weight: 700; margin-bottom: 85px; font-size: 11px; } /* Jarak margin-bottom luas untuk ruang stempel & ttd */
-                        .sig-line { border-bottom: 1.5px solid #000; } /* Garis lurus dipertebal dan dihitamkan */
-                        .sig-name { font-weight: bold; font-size: 12px; margin-top: 6px; text-transform: uppercase; } /* Tebalkan nama */
+                        .sig-label { font-weight: 700; margin-bottom: 85px; font-size: 11px; }
+                        .sig-line { border-bottom: 1.5px solid #000; }
+                        .sig-name { font-weight: bold; font-size: 12px; margin-top: 6px; text-transform: uppercase; }
                         
-                        /* Custom Page Print Footer */
                         .print-footer {
                             position: fixed;
                             bottom: 0;
@@ -997,7 +984,6 @@
                     </style>
                 </head>
                 <body>
-                    <!-- Printed Watermark in background -->
                     <div class="print-watermark">
                         <img src="https://iili.io/CjM3XgR.png" onerror="this.onerror=null; this.src='https://iili.io/CjM3XgR.th.png';" alt="Fami Collection Watermark">
                     </div>
@@ -1008,7 +994,7 @@
                                 <div class="logo-text">FAMI COLLECTION</div>
                                 <div class="biz-info" style="font-weight: 800; font-size: 13px;">Jasa Percetakan - Jalan Teluk Bakung, Gurun Panjang Utara</div>
                                 <div class="biz-info" style="color: #1e40af; font-weight: 800; font-size: 12px;">Website: www.famicollection.my.id</div>
-                                <div class="biz-info" style="margin-top: 3px; font-weight: 600; font-size: 11px;">Melayani: Fotokopi, Cetak Foto, Cari Tugas, Jasa Ketik, Scan Dokumen, ATK, Jilid, Print, Laminating, Materai, Pulsa dan Paket Internet.</div>
+                                <div class="biz-info" style="margin-top: 3px; font-weight: 600; font-size: 11px;">Melayani: Fotokopi, Cetak Foto, Cari Tugas, Jasa Ketik, Scan Dokumen, ATK, Jilid, Print, Laminating, Dan Materai, Pulsa dan Paket Internet.</div>
                                 <div class="biz-info" style="font-weight: 700; font-size: 11px;">HP: 085355304641 / 082170075994</div>
                             </div>
                         </div>
@@ -1030,15 +1016,16 @@
                         <thead>
                             <tr>
                                 <th>DESKRIPSI</th>
-                                <th style="text-align:center; width: 60px;">JML</th>
-                                <th style="text-align:right; width: 150px;">SATUAN</th>
-                                <th style="text-align:right; width: 150px;">TOTAL</th>
+                                <th style="text-align:center; width: 50px;">JML</th>
+                                <th style="text-align:center; width: 70px;">SATUAN</th>
+                                <th style="text-align:right; width: 130px;">HARGA SATUAN</th>
+                                <th style="text-align:right; width: 130px;">TOTAL</th>
                             </tr>
                         </thead>
                         <tbody>${itemsHtml}</tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="2" style="border: 1.5px solid #000;"></td>
+                                <td colspan="3" style="border: 1.5px solid #000;"></td>
                                 <td style="text-align:right; font-weight:700; padding: 10px; border: 1.5px solid #000;">TOTAL:</td>
                                 <td class="summary-total" style="text-align:right; padding: 10px; border: 1.5px solid #000;">${formatRupiah(d.total)}</td>
                             </tr>
@@ -1047,12 +1034,10 @@
                     
                     ${d.note ? `<div style="font-size:10px; border-top:1px solid #ccc; padding-top:5px; margin-bottom:5px; position: relative; z-index: 10;"><strong>Catatan:</strong> ${d.note}</div>` : ''}
                     
-                    <!-- BARCODE TANPA TEKS DESKRIPSI -->
                     <div class="barcode-container">
                         <img class="barcode-img" src="https://iili.io/CjGtImx.png" onerror="this.onerror=null; this.src='https://iili.io/CjGtImx.th.png';" alt="Barcode Fami Collection">
                     </div>
 
-                    <!-- AREA TANDA TANGAN DIPERBARUI -->
                     <div class="footer-section">
                         <div class="sig-block">
                             <div class="sig-label">Tanda Terima</div>
@@ -1066,10 +1051,9 @@
                         </div>
                     </div>
 
-                    <!-- Footer Cetak Tambahan (Paling Bawah dengan Garis Lurus) -->
                     <div class="print-footer">
                         <div><strong>No. Kuitansi:</strong> ${d.id} &nbsp;|&nbsp; <strong>Pelanggan:</strong> ${d.customer}</div>
-                        <div style="font-style: italic;">Kuitansi ini dicetak pada Aplikasi Fami Collection | Nota ini merupakan bukti pembayaran yang sah dari TOKO FAMI COLLECTION</div>
+                        <div style="font-style: italic;">Kuitansi ini dicetak pada Aplikasi Fami Collection</div>
                         <div><strong>Waktu Cetak:</strong> ${printDateTime}</div>
                     </div>
                 </body>
