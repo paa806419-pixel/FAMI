@@ -389,7 +389,7 @@
 
                 <div class="flex justify-end space-x-4 pt-4 text-gray-900">
                     <button type="button" onclick="closeModal()" class="px-10 py-4 rounded-2xl border-2 border-gray-100 text-gray-400 hover:bg-gray-50 font-bold transition">Batal</button>
-                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase text-white">Simpan Data Ke Cloud</button>
+                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase text-white">Simpan</button>
                 </div>
             </form>
         </div>
@@ -520,7 +520,7 @@
         }
 
         async function syncData() {
-            toggleLoading(true, "Sinkronisasi Cloud...");
+            toggleLoading(true, "...Memuat Data...");
             try {
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
