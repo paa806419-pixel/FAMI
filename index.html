@@ -801,7 +801,7 @@
             localStorage.setItem('fami_ttd_yelmi', yelmi);
             localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
 
-            toggleLoading(true, "Menyimpan TTD ke Cloud...");
+            toggleLoading(true, "Menyimpan TTD ...");
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
