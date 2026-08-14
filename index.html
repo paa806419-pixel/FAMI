@@ -81,11 +81,11 @@
             <form id="login-form" class="space-y-6">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Username</label>
-                    <input type="text" id="login-username" required placeholder="*****" class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900">
+                    <input type="text" id="login-username" required placeholder="Masukan Username" class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Kata Sandi</label>
-                    <input type="password" id="login-password" required placeholder="*****" class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium tracking-widest text-gray-900">
+                    <input type="password" id="login-password" required placeholder="Masukan Sandi" class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium tracking-widest text-gray-900">
                 </div>
                 <div id="login-error" class="hidden text-red-500 text-sm font-bold text-center bg-red-50 p-3 rounded-xl">
                     Username atau Sandi salah!
@@ -156,7 +156,7 @@
                 <div id="page-beranda" class="space-y-6 animate-in fade-in duration-500 text-gray-900">
                     <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-10 rounded-3xl shadow-lg text-white">
                         <h1 class="text-4xl font-black mb-2 text-white">Halo, Selamat Datang!</h1>
-                        <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Kuitansi Digital Fami Collection.</p>
+                        <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Kuitansi Digital Fami Collectio.</p>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-900">
@@ -504,6 +504,21 @@
         </div>
     </div>
 
+    <!-- Modal Konfirmasi Hapus Data Kuitansi -->
+    <div id="delete-modal" class="fixed inset-0 bg-gray-950/50 backdrop-blur-sm z-[600] flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-8 text-center space-y-5 animate-in zoom-in duration-200">
+            <div class="text-5xl">🗑️</div>
+            <div>
+                <h4 class="text-xl font-extrabold text-gray-800">Anda Yakin Hapus Data Ini?</h4>
+                <p id="delete-modal-text" class="text-sm text-gray-500 mt-2 font-medium">Data kuitansi akan dihapus dari sistem Google Sheets.</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button onclick="closeDeleteModal()" class="py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition active:scale-95">Tidak</button>
+                <button onclick="confirmDeleteAction()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition shadow-lg shadow-red-200 active:scale-95">Ya</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
         // Web Manifest Dynamic Generator
@@ -511,7 +526,7 @@
             const myManifest = {
                 "name": "Fami Collection - Sistem Kuitansi Digital",
                 "short_name": "Fami Receipt",
-                "description": "Sistem Aplikasi Manajemen Kuitansi Fami Collection",
+                "description": "Sistem Aplikasi Manajemen Kuitansi Cloud Fami Collection",
                 "start_url": window.location.href,
                 "display": "standalone",
                 "background_color": "#1d4ed8",
@@ -528,17 +543,18 @@
             document.getElementById('manifest-link').setAttribute('href', manifestURL);
         })();
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4DayL0rCJDZtHLQCdwcc6IUtFWbHL8jggU0oSJjOtpR6XL-OShqOX2Ixnt_9cMwg_Jw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkgl3xY2yZHBeIEFy_nRAFX0QQQ6LDPJUfIHX2MXABgeI2Q_Xy_A5KBtSXiG6Ph91mXg/exec";
 
         let receipts = [];
         let nextSequence = 1;
         let activeYear = new Date().getFullYear();
         let revenueChartInstance = null;
+        let deleteTargetIdx = null;
 
         // TTD Settings Object
         let ttdSettings = {
-            fauziUrl: localStorage.getItem('fami_ttd_fauzi') || "",
-            yelmiUrl: localStorage.getItem('fami_ttd_yelmi') || ""
+            fauziUrl: "",
+            yelmiUrl: ""
         };
 
         // Pagination State Variables
@@ -633,7 +649,7 @@
         }
 
         async function syncData() {
-            toggleLoading(true, "...Tunggu Sebentar...");
+            toggleLoading(true, "..Memuat Data...");
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'GET',
@@ -728,7 +744,7 @@
             }
         }
 
-        function toggleLoading(show, text = "Menghubungkan ke Cloud...") {
+        function toggleLoading(show, text = "Menghubungkan ke Database...") {
             document.getElementById('loading-text').innerText = text;
             document.getElementById('loading-overlay').classList.toggle('hidden', !show);
         }
@@ -801,7 +817,7 @@
             localStorage.setItem('fami_ttd_yelmi', yelmi);
             localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
 
-            toggleLoading(true, "Menyimpan TTD ...");
+            toggleLoading(true, "Menyimpan TTD...");
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -815,7 +831,7 @@
                 });
                 const res = await response.json();
                 if (res.status === "success") {
-                    showCustomToastModal("Berhasil", "Pengaturan TTD Elektronik berhasil disimpan ke Cloud!", "✅");
+                    showCustomToastModal("Berhasil", "Pengaturan TTD Elektronik berhasil disimpan!", "✅");
                 } else {
                     showCustomToastModal("Tersimpan Lokal", "TTD tersimpan di browser Anda (Local Storage).", "ℹ️");
                 }
@@ -1072,10 +1088,57 @@
                     <td class="px-8 py-6 text-center space-x-3">
                         <button onclick="editAction(${originalIdx})" class="text-blue-600 hover:text-blue-800 font-bold text-sm">Edit</button>
                         <button onclick="printAction(${originalIdx})" class="text-green-600 hover:text-green-800 font-bold text-sm">Cetak</button>
+                        <button onclick="openDeleteModal(${originalIdx})" class="text-red-600 hover:text-red-800 font-bold text-sm">Hapus</button>
                     </td>
                 `;
                 list.appendChild(tr);
             });
+        }
+
+        // Fungsi Modal & Aksi Hapus
+        function openDeleteModal(idx) {
+            deleteTargetIdx = idx;
+            const r = receipts[idx];
+            if (!r) return;
+            document.getElementById('delete-modal-text').innerText = `Kuitansi ${r.id} atas nama "${r.customer}" akan dihapus permanen.`;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            deleteTargetIdx = null;
+            document.getElementById('delete-modal').classList.add('hidden');
+        }
+
+        async function confirmDeleteAction() {
+            if (deleteTargetIdx === null) return;
+            const r = receipts[deleteTargetIdx];
+            closeDeleteModal();
+            if (!r) return;
+
+            toggleLoading(true, "Menghapus Kuitansi dari Database...");
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'delete',
+                        id: r.id
+                    }),
+                    redirect: 'follow'
+                });
+                const res = await response.json();
+                if (res.status === "success") {
+                    showToast(r.id, "Berhasil Dihapus");
+                    await syncData();
+                } else {
+                    showCustomToastModal("Gagal Hapus", res.message || "Gagal menghapus kuitansi.", "⚠️");
+                }
+            } catch (err) {
+                console.warn("Gagal hapus data dari Cloud:", err);
+                showCustomToastModal("Gagal Hapus", "Tidak dapat terhubung ke Google Sheets. Pastikan koneksi internet aktif.", "⚠️");
+            } finally {
+                toggleLoading(false);
+            }
         }
 
         function buildRevenueChart() {
@@ -1218,12 +1281,13 @@
             const isTTDActive = d.useTTD === true || d.useTTD === "true" || d.useTTD === "Ya" || d.useTTD == 1;
             
             let ttdUrlToUse = d.ttdUrl;
-            if (!ttdUrlToUse) {
+            if (isTTDActive && !ttdUrlToUse) {
                 ttdUrlToUse = d.signer === 'Fauzi' ? fauziUrl : yelmiUrl;
             }
 
             let ttdImageHtml = "";
-            if ((isTTDActive || ttdUrlToUse) && ttdUrlToUse.length > 5) {
+            // Hanya tampilkan gambar TTD jika sakelar Aktifkan TTD Elektronik bernilai AKTIF
+            if (isTTDActive && ttdUrlToUse && ttdUrlToUse.trim().length > 5) {
                 ttdImageHtml = `<div style="height: 65px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px;"><img src="${ttdUrlToUse}" style="max-height: 65px; max-width: 160px; object-fit: contain;" alt="TTD ${d.signer}" crossorigin="anonymous"></div>`;
             } else {
                 ttdImageHtml = `<div style="height: 65px;"></div>`;
