@@ -71,7 +71,7 @@
                     <img src="https://iili.io/B6vhnlp.th.png" alt="Logo Fami Collection" class="h-20 w-auto">
                 </div>
                 <h1 class="text-4xl font-black text-blue-700 tracking-tighter">FAMI</h1>
-                <p class="text-gray-400 font-semibold uppercase tracking-widest text-xs">Collection System</p>
+                <p class="text-gray-400 font-semibold uppercase tracking-widest text-xs">COLLECTION</p>
                 <div class="pt-2 text-gray-900">
                     <h2 class="text-xl font-bold">Silakan Masuk</h2>
                     <p class="text-sm text-gray-500">Gunakan akun Anda untuk mengakses sistem.</p>
@@ -90,7 +90,7 @@
                 <div id="login-error" class="hidden text-red-500 text-sm font-bold text-center bg-red-50 p-3 rounded-xl">
                     Username atau Sandi salah!
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 transition transform hover:-translate-y-1 active:scale-95 text-white">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 transition transform hover:-translate-y-1 active:scale-95">
                     MASUK KE SISTEM
                 </button>
             </form>
@@ -117,6 +117,10 @@
                 <button onclick="switchPage('kuitansi')" id="nav-kuitansi" class="w-full flex items-center py-4 px-8 hover:bg-blue-600 transition-all duration-200 text-white">
                     <span class="mr-3 text-xl text-white">📄</span> 
                     <span class="font-medium text-white">Kuitansi</span>
+                </button>
+                <button onclick="switchPage('ttd')" id="nav-ttd" class="w-full flex items-center py-4 px-8 hover:bg-blue-600 transition-all duration-200 text-white">
+                    <span class="mr-3 text-xl text-white">✍️</span> 
+                    <span class="font-medium text-white">Navigasi TTD</span>
                 </button>
             </nav>
             <div class="p-4 border-t border-blue-600">
@@ -152,7 +156,7 @@
                 <div id="page-beranda" class="space-y-6 animate-in fade-in duration-500 text-gray-900">
                     <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-10 rounded-3xl shadow-lg text-white">
                         <h1 class="text-4xl font-black mb-2 text-white">Halo, Selamat Datang!</h1>
-                        <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Fami Collection.</p>
+                        <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Kuitansi Digital Fami Collection.</p>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-900">
@@ -160,21 +164,21 @@
                             <p class="text-gray-500 font-bold text-xs uppercase tracking-widest mb-4">Total Kuitansi</p>
                             <div class="flex items-end justify-between">
                                 <h3 class="text-4xl font-black text-gray-800" id="stat-total-count">0</h3>
-                                <span class="bg-blue-100 text-blue-600 p-2 rounded-lg text-blue-600">📊</span>
+                                <span class="bg-blue-100 text-blue-600 p-2 rounded-lg">📊</span>
                             </div>
                         </div>
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition">
                             <p class="text-gray-500 font-bold text-xs uppercase tracking-widest mb-4">Omset Terdaftar</p>
                             <div class="flex items-end justify-between">
                                 <h3 class="text-2xl font-black text-green-600" id="stat-total-revenue">Rp 0</h3>
-                                <span class="bg-green-100 text-green-600 p-2 rounded-lg text-green-600">💰</span>
+                                <span class="bg-green-100 text-green-600 p-2 rounded-lg">💰</span>
                             </div>
                         </div>
                         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition">
                             <p class="text-gray-500 font-bold text-xs uppercase tracking-widest mb-4">Tahun Berjalan</p>
                             <div class="flex items-end justify-between">
                                 <h3 class="text-4xl font-black text-purple-600" id="stat-year">2026</h3>
-                                <span class="bg-purple-100 text-purple-600 p-2 rounded-lg text-purple-600">📅</span>
+                                <span class="bg-purple-100 text-purple-600 p-2 rounded-lg">📅</span>
                             </div>
                         </div>
                     </div>
@@ -247,8 +251,8 @@
                                 </select>
                             </div>
                         </div>
-                        <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-bold flex items-center transition transform hover:scale-105 shadow-xl shadow-blue-200 text-white whitespace-nowrap h-12">
-                            <span class="mr-2 text-xl text-white font-bold">+</span> Tambah Data
+                        <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-2xl font-bold flex items-center transition transform hover:scale-105 shadow-xl shadow-blue-200 whitespace-nowrap h-12">
+                            <span class="mr-2 text-xl font-bold">+</span> Tambah Data
                         </button>
                     </div>
 
@@ -279,9 +283,70 @@
                         </div>
 
                         <div id="empty-state" class="p-20 text-center hidden flex flex-col items-center text-gray-900">
-                            <div class="text-6xl mb-4 opacity-20 text-gray-400 text-gray-900">📄</div>
-                            <p class="text-gray-400 font-medium italic text-gray-900">Data tidak ditemukan.</p>
+                            <div class="text-6xl mb-4 opacity-20 text-gray-400">📄</div>
+                            <p class="text-gray-400 font-medium italic">Data tidak ditemukan.</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Page: Navigasi TTD -->
+                <div id="page-ttd" class="hidden space-y-6 animate-in fade-in duration-500 text-gray-900">
+                    <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-8 rounded-3xl shadow-lg text-white">
+                        <h2 class="text-3xl font-black mb-2">✍️ Pengaturan Tanda Tangan Elektronik (TTD)</h2>
+                        <p class="text-blue-100 text-sm opacity-90">Masukkan URL gambar TTD untuk Fauzi dan Yelmi Putri agar dapat muncul pada kuitansi saat dicetak.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- TTD Fauzi Card -->
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6 flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center font-black text-xl">F</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Tanda Tangan Fauzi</h3>
+                                        <p class="text-xs text-gray-400">Pihak Penandatangan Fami Collection</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">URL Gambar TTD Fauzi</label>
+                                    <input type="text" id="ttd-url-fauzi" oninput="previewTTDFauzi()" placeholder="https://iili.io/..." class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-sm font-medium">
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200 flex flex-col items-center justify-center space-y-2 min-h-[140px]">
+                                    <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Pratinjau TTD Fauzi</span>
+                                    <img id="img-preview-fauzi" src="" alt="Belum Ada TTD" class="max-h-24 object-contain hidden">
+                                    <span id="txt-preview-fauzi" class="text-xs text-gray-400 italic">Masukkan URL gambar transparan (PNG) di atas</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TTD Yelmi Putri Card -->
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6 flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center font-black text-xl">Y</div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">Tanda Tangan Yelmi Putri</h3>
+                                        <p class="text-xs text-gray-400">Pihak Penandatangan Fami Collection</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">URL Gambar TTD Yelmi Putri</label>
+                                    <input type="text" id="ttd-url-yelmi" oninput="previewTTDYelmi()" placeholder="https://iili.io/..." class="w-full border border-gray-200 rounded-2xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-sm font-medium">
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200 flex flex-col items-center justify-center space-y-2 min-h-[140px]">
+                                    <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Pratinjau TTD Yelmi Putri</span>
+                                    <img id="img-preview-yelmi" src="" alt="Belum Ada TTD" class="max-h-24 object-contain hidden">
+                                    <span id="txt-preview-yelmi" class="text-xs text-gray-400 italic">Masukkan URL gambar transparan (PNG) di atas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-4">
+                        <button onclick="saveTTDSettings()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-4 rounded-2xl shadow-xl shadow-blue-200 transition transform hover:-translate-y-1 active:scale-95 flex items-center space-x-2">
+                            <span>💾</span>
+                            <span>SIMPAN PENGATURAN TTD</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -293,68 +358,85 @@
         <div class="bg-white w-full max-w-6xl rounded-3xl shadow-2xl my-auto animate-in zoom-in duration-300">
             <div class="p-8 border-b sticky top-0 bg-white/90 backdrop-blur-md z-10 flex justify-between items-center rounded-t-3xl text-gray-900">
                 <div>
-                    <h2 id="modal-title" class="text-3xl font-black text-gray-800 text-gray-900">Buat Kuitansi Baru</h2>
-                    <p class="text-gray-500 text-sm text-gray-900">Lengkapi detail transaksi untuk disimpan ke Cloud.</p>
+                    <h2 id="modal-title" class="text-3xl font-black text-gray-800">Buat Kuitansi Baru</h2>
+                    <p class="text-gray-500 text-sm">Lengkapi detail transaksi untuk disimpan.</p>
                 </div>
-                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all text-3xl font-light text-gray-900">&times;</button>
+                <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all text-3xl font-light">&times;</button>
             </div>
             
-            <form id="receipt-form" class="p-10 space-y-10 text-gray-900">
+            <form id="receipt-form" class="p-10 space-y-10">
                 <input type="hidden" id="form-mode" value="add">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 text-gray-900">
-                    <div class="lg:col-span-1 space-y-6 text-gray-900">
-                        <div class="p-6 bg-blue-50 rounded-2xl border border-blue-100 text-gray-900">
-                            <label class="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-2 text-gray-900">No. Kuitansi</label>
-                            <input type="text" id="form-no-kuitansi" readonly class="w-full bg-transparent border-none p-0 font-black text-2xl text-blue-800 focus:ring-0 text-gray-900">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="p-6 bg-blue-50 rounded-2xl border border-blue-100">
+                            <label class="block text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">No. Kuitansi</label>
+                            <input type="text" id="form-no-kuitansi" readonly class="w-full bg-transparent border-none p-0 font-black text-2xl text-blue-800 focus:ring-0">
                         </div>
-                        <div class="text-gray-900">
-                            <label class="block text-sm font-bold text-gray-700 mb-2 text-gray-900">Metode Pembayaran</label>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Metode Pembayaran</label>
                             <select id="form-payment" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none text-lg font-medium transition-all text-gray-900">
                                 <option value="Tunai">💵 Tunai</option>
                                 <option value="Transfer Bank">🏦 Transfer Bank</option>
                             </select>
                         </div>
-                        <div class="text-gray-900">
-                            <label class="block text-sm font-bold text-gray-700 mb-2 text-gray-900">Tanda Tangan Oleh (Pihak Fami)</label>
-                            <select id="form-signer" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none text-lg font-medium transition-all text-gray-900">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Tanda Tangan Oleh (Pihak Fami)</label>
+                            <select id="form-signer" onchange="updateTTDFormState()" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none text-lg font-medium transition-all text-gray-900">
                                 <option value="Fauzi">Fauzi</option>
                                 <option value="Yelmi Putri">Yelmi Putri</option>
                             </select>
                         </div>
-                        <div class="text-gray-900">
-                            <label class="block text-sm font-bold text-gray-700 mb-2 text-gray-900">Nama Penerima (Tanda Tangan Pelanggan)</label>
+
+                        <!-- Sakelar TTD Elektronik -->
+                        <div class="p-5 bg-blue-50/50 border border-blue-100 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-bold text-gray-800">Aktifkan TTD Elektronik</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="form-use-ttd" onchange="updateTTDFormState()" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500">Jika diaktifkan, gambar TTD resmi dari penandatangan yang dipilih akan muncul di kuitansi cetak.</p>
+                            <div id="ttd-preview-box" class="hidden pt-2 border-t border-blue-100 flex items-center justify-between">
+                                <span class="text-xs font-bold text-blue-700">Pratinjau TTD:</span>
+                                <img id="ttd-preview-thumb" src="" alt="TTD" class="h-10 object-contain max-w-[120px] p-1 bg-white border border-gray-200 rounded-lg">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Nama Penerima (Tanda Tangan Pelanggan)</label>
                             <input type="text" id="form-receiver-name" placeholder="Nama yang menerima nota" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none text-lg font-medium transition-all text-gray-900">
                         </div>
                     </div>
 
-                    <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-900">
-                        <div class="md:col-span-2 text-gray-900">
-                            <label class="block text-sm font-bold text-gray-700 mb-2 text-gray-900">Nama Pelanggan / Institusi</label>
+                    <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Nama Pelanggan / Institusi</label>
                             <input type="text" id="form-customer-name" required placeholder="Nama Pelanggan" class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none text-xl font-semibold transition-all text-gray-900">
                         </div>
-                        <div class="md:col-span-2 text-gray-900">
-                            <label class="block text-sm font-bold text-gray-700 mb-2 text-gray-900">Alamat Pelanggan</label>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Pelanggan</label>
                             <textarea id="form-address" rows="2" placeholder="Alamat pelanggan..." class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900"></textarea>
                         </div>
-                        <div class="text-gray-900">
-                            <label class="block text-sm font-bold text-gray-700 mb-2 text-gray-900">Tanggal Transaksi</label>
-                            <input type="date" id="form-date" required class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900 text-gray-900">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Tanggal Transaksi</label>
+                            <input type="date" id="form-date" required class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900">
                         </div>
-                        <div class="text-gray-900">
-                            <label class="block text-sm font-bold text-gray-700 mb-2 text-gray-900">No. HP Pelanggan</label>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">No. HP Pelanggan</label>
                             <input type="text" id="form-phone" placeholder="08..." class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all text-gray-900">
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-8 border-t border-gray-100 text-gray-900">
-                    <div class="flex justify-between items-center mb-6 text-gray-900">
-                        <h3 class="text-xl font-bold text-gray-800 text-gray-900">Detail Pesanan</h3>
-                        <button type="button" onclick="addItemRow()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-xl font-bold text-sm transition shadow-lg shadow-green-100 transform active:scale-95 text-white">+ Tambah Baris</button>
+                <div class="pt-8 border-t border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">Detail Pesanan</h3>
+                        <button type="button" onclick="addItemRow()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-xl font-bold text-sm transition shadow-lg shadow-green-100 transform active:scale-95">+ Tambah Baris</button>
                     </div>
-                    <div class="overflow-x-auto rounded-2xl border border-gray-100 bg-gray-50/30 text-gray-900">
-                        <table class="w-full min-w-[850px] text-gray-900">
-                            <thead class="text-gray-400 text-xs uppercase font-black text-gray-900">
+                    <div class="overflow-x-auto rounded-2xl border border-gray-100 bg-gray-50/30">
+                        <table class="w-full min-w-[850px]">
+                            <thead class="text-gray-400 text-xs uppercase font-black">
                                 <tr>
                                     <th class="p-5 text-left">Deskripsi Produk/Jasa</th>
                                     <th class="p-5 text-center w-24">Jml</th>
@@ -369,10 +451,10 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-10 border-t border-gray-100 text-gray-900">
-                    <div class="space-y-4 text-gray-900">
-                        <label class="block text-sm font-bold text-gray-700 text-gray-900">Catatan Khusus</label>
-                        <textarea id="form-note" rows="3" placeholder="Informasi tambahan..." class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all italic text-gray-600 text-gray-900"></textarea>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 pt-10 border-t border-gray-100">
+                    <div class="space-y-4">
+                        <label class="block text-sm font-bold text-gray-700">Catatan Khusus</label>
+                        <textarea id="form-note" rows="3" placeholder="Informasi tambahan..." class="w-full border border-gray-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all italic text-gray-600"></textarea>
                     </div>
                     
                     <div class="p-8 bg-gray-900 rounded-3xl text-white flex flex-col justify-center shadow-2xl">
@@ -387,9 +469,9 @@
                     </div>
                 </div>
 
-                <div class="flex justify-end space-x-4 pt-4 text-gray-900">
+                <div class="flex justify-end space-x-4 pt-4">
                     <button type="button" onclick="closeModal()" class="px-10 py-4 rounded-2xl border-2 border-gray-100 text-gray-400 hover:bg-gray-50 font-bold transition">Batal</button>
-                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase text-white">Simpan</button>
+                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase">Simpan Data</button>
                 </div>
             </form>
         </div>
@@ -405,30 +487,39 @@
         </div>
     </div>
 
+    <!-- Modal Konfirmasi Keluar Sistem -->
+    <div id="logout-modal" class="fixed inset-0 bg-gray-950/50 backdrop-blur-sm z-[600] flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-8 text-center space-y-5 animate-in zoom-in duration-200">
+            <div class="flex justify-center mb-1">
+                <img src="https://iili.io/B6vhnlp.th.png" alt="Logo Fami Collection" class="h-16 w-auto object-contain">
+            </div>
+            <div>
+                <h4 class="text-xl font-extrabold text-gray-800">Konfirmasi Keluar</h4>
+                <p class="text-sm text-gray-500 mt-2 font-medium">Apakah Yakin ingin Keluar?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button onclick="closeLogoutModal()" class="py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition active:scale-95">Tidak</button>
+                <button onclick="confirmLogout()" class="py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition shadow-lg shadow-red-200 active:scale-95">Ya</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
-        // Membuat Manifest Web dinamis
+        // Web Manifest Dynamic Generator
         (function() {
             const myManifest = {
                 "name": "Fami Collection - Sistem Kuitansi Digital",
                 "short_name": "Fami Receipt",
-                "description": "Sistem Aplikasi Manajemen Kuitansi Cloud Fami Collection",
+                "description": "Sistem Aplikasi Manajemen Kuitansi Fami Collection",
                 "start_url": window.location.href,
                 "display": "standalone",
                 "background_color": "#1d4ed8",
                 "theme_color": "#1d4ed8",
                 "orientation": "any",
                 "icons": [
-                    {
-                        "src": "https://iili.io/B6vhnlp.th.png",
-                        "sizes": "192x192",
-                        "type": "image/png"
-                    },
-                    {
-                        "src": "https://iili.io/B6vhnlp.th.png",
-                        "sizes": "512x512",
-                        "type": "image/png"
-                    }
+                    { "src": "https://iili.io/B6vhnlp.th.png", "sizes": "192x192", "type": "image/png" },
+                    { "src": "https://iili.io/B6vhnlp.th.png", "sizes": "512x512", "type": "image/png" }
                 ]
             };
             const stringManifest = JSON.stringify(myManifest);
@@ -437,12 +528,18 @@
             document.getElementById('manifest-link').setAttribute('href', manifestURL);
         })();
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0JynOCd9Hgll6W3DgQcDHX8g8_oDU3eAhHevEM9vBCz9liC7VoevJQ_PLcqtnqrgGfg/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4DayL0rCJDZtHLQCdwcc6IUtFWbHL8jggU0oSJjOtpR6XL-OShqOX2Ixnt_9cMwg_Jw/exec";
 
         let receipts = [];
         let nextSequence = 1;
         let activeYear = new Date().getFullYear();
         let revenueChartInstance = null;
+
+        // TTD Settings Object
+        let ttdSettings = {
+            fauziUrl: localStorage.getItem('fami_ttd_fauzi') || "",
+            yelmiUrl: localStorage.getItem('fami_ttd_yelmi') || ""
+        };
 
         // Pagination State Variables
         let currentPage = 1;
@@ -453,7 +550,6 @@
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
 
-        // Daftar Pilihan Satuan Resmi
         const LIST_SATUAN = [
             "Buah", "Pcs", "Rim", "Kotak / Box", "Pak", "Lusin", "Orang", 
             "Bulan", "Set", "Dus", "Paket", "Hari", "Tahun", "Sachet", 
@@ -488,9 +584,14 @@
             return clean;
         }
 
+        function formatRupiah(num) {
+            const val = parseFloat(num) || 0;
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
+        }
+
         function showCustomToastModal(title, message, icon = "⚠️") {
             document.getElementById('toast-modal-title').innerText = title;
-            document.getElementById('toast-modal-message').innerText = message;
+            document.getElementById('toast-modal-message').innerHTML = message.replace(/\n/g, '<br>');
             document.getElementById('toast-modal-icon').innerText = icon;
             document.getElementById('toast-modal').classList.remove('hidden');
         }
@@ -516,20 +617,53 @@
         };
 
         function logout() {
+            openLogoutModal();
+        }
+
+        function openLogoutModal() {
+            document.getElementById('logout-modal').classList.remove('hidden');
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logout-modal').classList.add('hidden');
+        }
+
+        function confirmLogout() {
             location.reload(); 
         }
 
         async function syncData() {
-            toggleLoading(true, "...Memuat Data...");
+            toggleLoading(true, "...Tunggu Sebentar...");
             try {
-                const response = await fetch(SCRIPT_URL);
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+                if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
                 const data = await response.json();
                 
-                if (data && Array.isArray(data)) {
-                    receipts = data.map(r => ({
+                // Ambil TTD Settings dari Cloud jika ada
+                if (data && data.ttdSettings) {
+                    if (data.ttdSettings.fauziUrl) ttdSettings.fauziUrl = data.ttdSettings.fauziUrl;
+                    if (data.ttdSettings.yelmiUrl) ttdSettings.yelmiUrl = data.ttdSettings.yelmiUrl;
+                    
+                    document.getElementById('ttd-url-fauzi').value = ttdSettings.fauziUrl || "";
+                    document.getElementById('ttd-url-yelmi').value = ttdSettings.yelmiUrl || "";
+                    previewTTDFauzi();
+                    previewTTDYelmi();
+                    localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
+                    localStorage.setItem('fami_ttd_fauzi', ttdSettings.fauziUrl || "");
+                    localStorage.setItem('fami_ttd_yelmi', ttdSettings.yelmiUrl || "");
+                }
+
+                const receiptData = Array.isArray(data) ? data : (data?.receipts || []);
+
+                if (Array.isArray(receiptData)) {
+                    receipts = receiptData.map(r => ({
                         ...r,
                         date: cleanDateString(r.date)
                     }));
+                    localStorage.setItem('fami_receipts_cache', JSON.stringify(receipts));
                 } else {
                     receipts = [];
                 }
@@ -545,11 +679,50 @@
                 renderList();
                 buildRevenueChart();
             } catch (err) {
-                console.error("Sinkronisasi gagal:", err);
-                receipts = [];
+                console.warn("Sinkronisasi Cloud offline / gagal dijangkau:", err.message || err);
+                
+                // FALLBACK TO LOCALSTORAGE JIKA FETCH GAGAL
+                const localReceipts = localStorage.getItem('fami_receipts_cache');
+                const localTTD = localStorage.getItem('fami_ttd_settings');
+                
+                if (localTTD) {
+                    try {
+                        const parsedTTD = JSON.parse(localTTD);
+                        ttdSettings.fauziUrl = parsedTTD.fauziUrl || localStorage.getItem('fami_ttd_fauzi') || "";
+                        ttdSettings.yelmiUrl = parsedTTD.yelmiUrl || localStorage.getItem('fami_ttd_yelmi') || "";
+                        document.getElementById('ttd-url-fauzi').value = ttdSettings.fauziUrl;
+                        document.getElementById('ttd-url-yelmi').value = ttdSettings.yelmiUrl;
+                        previewTTDFauzi();
+                        previewTTDYelmi();
+                    } catch(e) {}
+                }
+                
+                if (localReceipts) {
+                    try {
+                        receipts = JSON.parse(localReceipts);
+                    } catch(e) {
+                        receipts = [];
+                    }
+                } else {
+                    receipts = [];
+                }
+                
+                receipts.sort((a, b) => a.id.localeCompare(b.id));
+                if (receipts.length > 0) {
+                    const lastId = [...receipts].sort((a, b) => b.id.localeCompare(a.id))[0].id;
+                    const match = lastId.match(/FM-(\d+)-/);
+                    if (match) nextSequence = parseInt(match[1]) + 1;
+                }
+                
+                initApp();
                 renderList();
                 buildRevenueChart();
-                showCustomToastModal("Koneksi Gagal", "Gagal menghubungkan ke server cloud Fami Collection.", "❌");
+                
+                showCustomToastModal(
+                    "Mode Offline / Lokal Aktif", 
+                    "Sistem berjalan dalam mode penyimpanan lokal (Offline Cache).\n\nJika ingin terhubung ke Google Sheet:\n1. Buka Google Apps Script Anda.\n2. Klik <b>Deploy</b> &rarr; <b>Manage deployments</b>.\n3. Pastikan <b>Who has access</b> diset ke <b>Anyone (Siapa Saja)</b>.", 
+                    "ℹ️"
+                );
             } finally {
                 toggleLoading(false);
             }
@@ -573,11 +746,107 @@
             document.querySelectorAll('[id^="nav-"]').forEach(n => n.classList.remove('sidebar-active'));
             document.getElementById('page-' + page).classList.remove('hidden');
             document.getElementById('nav-' + page).classList.add('sidebar-active');
-            document.getElementById('page-title').innerText = page.charAt(0).toUpperCase() + page.slice(1);
+            document.getElementById('page-title').innerText = page === 'ttd' ? 'Navigasi TTD' : page.charAt(0).toUpperCase() + page.slice(1);
         }
 
         function generateId() {
             return `FM-${String(nextSequence).padStart(4, '0')}-${activeYear}`;
+        }
+
+        function previewTTDFauzi() {
+            const url = document.getElementById('ttd-url-fauzi').value.trim();
+            ttdSettings.fauziUrl = url;
+            localStorage.setItem('fami_ttd_fauzi', url);
+            localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
+            
+            const img = document.getElementById('img-preview-fauzi');
+            const txt = document.getElementById('txt-preview-fauzi');
+            if (url) {
+                img.src = url;
+                img.classList.remove('hidden');
+                txt.classList.add('hidden');
+            } else {
+                img.classList.add('hidden');
+                txt.classList.remove('hidden');
+            }
+            updateTTDFormState();
+        }
+
+        function previewTTDYelmi() {
+            const url = document.getElementById('ttd-url-yelmi').value.trim();
+            ttdSettings.yelmiUrl = url;
+            localStorage.setItem('fami_ttd_yelmi', url);
+            localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
+
+            const img = document.getElementById('img-preview-yelmi');
+            const txt = document.getElementById('txt-preview-yelmi');
+            if (url) {
+                img.src = url;
+                img.classList.remove('hidden');
+                txt.classList.add('hidden');
+            } else {
+                img.classList.add('hidden');
+                txt.classList.remove('hidden');
+            }
+            updateTTDFormState();
+        }
+
+        async function saveTTDSettings() {
+            const fauzi = document.getElementById('ttd-url-fauzi').value.trim();
+            const yelmi = document.getElementById('ttd-url-yelmi').value.trim();
+
+            ttdSettings.fauziUrl = fauzi;
+            ttdSettings.yelmiUrl = yelmi;
+            localStorage.setItem('fami_ttd_fauzi', fauzi);
+            localStorage.setItem('fami_ttd_yelmi', yelmi);
+            localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
+
+            toggleLoading(true, "Menyimpan TTD ke Cloud...");
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'save_ttd',
+                        fauziUrl: fauzi,
+                        yelmiUrl: yelmi
+                    }),
+                    redirect: 'follow'
+                });
+                const res = await response.json();
+                if (res.status === "success") {
+                    showCustomToastModal("Berhasil", "Pengaturan TTD Elektronik berhasil disimpan ke Cloud!", "✅");
+                } else {
+                    showCustomToastModal("Tersimpan Lokal", "TTD tersimpan di browser Anda (Local Storage).", "ℹ️");
+                }
+            } catch (err) {
+                console.warn("Gagal menyimpan TTD ke Cloud:", err);
+                showCustomToastModal("Tersimpan Lokal", "TTD tersimpan di browser Anda. (Koneksi Cloud Offline)", "ℹ️");
+            } finally {
+                toggleLoading(false);
+            }
+        }
+
+        function updateTTDFormState() {
+            const useTTD = document.getElementById('form-use-ttd').checked;
+            const signer = document.getElementById('form-signer').value;
+            const box = document.getElementById('ttd-preview-box');
+            const thumb = document.getElementById('ttd-preview-thumb');
+
+            const fauzi = document.getElementById('ttd-url-fauzi')?.value.trim() || ttdSettings.fauziUrl || localStorage.getItem('fami_ttd_fauzi') || "";
+            const yelmi = document.getElementById('ttd-url-yelmi')?.value.trim() || ttdSettings.yelmiUrl || localStorage.getItem('fami_ttd_yelmi') || "";
+
+            if (useTTD) {
+                const url = signer === 'Fauzi' ? fauzi : yelmi;
+                if (url) {
+                    thumb.src = url;
+                    box.classList.remove('hidden');
+                } else {
+                    box.classList.add('hidden');
+                }
+            } else {
+                box.classList.add('hidden');
+            }
         }
 
         function openModal() {
@@ -585,6 +854,8 @@
             document.getElementById('form-mode').value = 'add';
             document.getElementById('modal-title').innerText = 'Buat Kuitansi Baru';
             document.getElementById('item-rows').innerHTML = '';
+            document.getElementById('form-use-ttd').checked = false;
+            updateTTDFormState();
             addItemRow();
             document.getElementById('form-date').valueAsDate = new Date();
             document.getElementById('form-no-kuitansi').value = generateId();
@@ -598,12 +869,10 @@
             document.body.style.overflow = 'auto';
         }
 
-        // FUNGSI TAMBAH BARIS ITEM DENGAN PILIHAN SATUAN
         function addItemRow(desc = '', qty = 1, unit = 'Pcs', price = 0) {
             const tr = document.createElement('tr');
             tr.className = "group hover:bg-white transition-colors text-gray-900";
             
-            // Generate dropdown HTML pilihan satuan
             const unitOptionsHtml = LIST_SATUAN.map(u => `<option value="${u}" ${u === unit ? 'selected' : ''}>${u}</option>`).join('');
 
             tr.innerHTML = `
@@ -615,7 +884,7 @@
                     </select>
                 </td>
                 <td class="p-4 w-48"><input type="number" value="${price}" placeholder="0" class="item-price w-full border rounded-xl p-3 text-right font-bold text-gray-900" oninput="calculate()"></td>
-                <td class="p-4 text-right font-black text-blue-700 item-total text-gray-900">Rp 0</td>
+                <td class="p-4 text-right font-black text-blue-700 item-total">Rp 0</td>
                 <td class="p-4 text-center"><button type="button" onclick="this.closest('tr').remove(); calculate()" class="text-red-400 text-2xl hover:text-red-600 transition">&times;</button></td>
             `;
             document.getElementById('item-rows').appendChild(tr);
@@ -623,26 +892,56 @@
         }
 
         function calculate() {
-            let total = 0;
-            document.querySelectorAll('#item-rows tr').forEach(row => {
-                const q = parseFloat(row.querySelector('.item-qty').value) || 0;
-                const p = parseFloat(row.querySelector('.item-price').value) || 0;
-                const sub = q * p;
-                total += sub;
-                row.querySelector('.item-total').innerText = formatRupiah(sub);
+            let subtotal = 0;
+            const rows = document.querySelectorAll('#item-rows tr');
+            rows.forEach(tr => {
+                const qtyInput = tr.querySelector('.item-qty');
+                const priceInput = tr.querySelector('.item-price');
+                const totalCell = tr.querySelector('.item-total');
+                
+                const qty = parseFloat(qtyInput ? qtyInput.value : 0) || 0;
+                const price = parseFloat(priceInput ? priceInput.value : 0) || 0;
+                const rowTotal = qty * price;
+                subtotal += rowTotal;
+                
+                if (totalCell) {
+                    totalCell.innerText = formatRupiah(rowTotal);
+                }
             });
-            document.getElementById('display-subtotal').innerText = formatRupiah(total);
-            document.getElementById('display-grandtotal').innerText = formatRupiah(total);
-            return total;
+            
+            const displaySubtotal = document.getElementById('display-subtotal');
+            const displayGrandTotal = document.getElementById('display-grandtotal');
+            if (displaySubtotal) displaySubtotal.innerText = formatRupiah(subtotal);
+            if (displayGrandTotal) displayGrandTotal.innerText = formatRupiah(subtotal);
+            
+            return subtotal;
         }
 
-        function formatRupiah(num) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+        function saveToLocalAndRefresh(payload) {
+            const existingIdx = receipts.findIndex(r => r.id === payload.id);
+            if (existingIdx >= 0) {
+                receipts[existingIdx] = payload;
+            } else {
+                receipts.push(payload);
+            }
+            localStorage.setItem('fami_receipts_cache', JSON.stringify(receipts));
+            closeModal();
+            initApp();
+            renderList();
+            buildRevenueChart();
+            showToast(payload.id, "Tersimpan Lokal");
         }
 
         document.getElementById('receipt-form').onsubmit = async function(e) {
             e.preventDefault();
             const grandTotal = calculate();
+            const signer = document.getElementById('form-signer').value;
+            const useTTD = document.getElementById('form-use-ttd').checked;
+            
+            const fauzi = document.getElementById('ttd-url-fauzi')?.value.trim() || ttdSettings.fauziUrl || localStorage.getItem('fami_ttd_fauzi') || "";
+            const yelmi = document.getElementById('ttd-url-yelmi')?.value.trim() || ttdSettings.yelmiUrl || localStorage.getItem('fami_ttd_yelmi') || "";
+            const ttdUrl = useTTD ? (signer === 'Fauzi' ? fauzi : yelmi) : "";
+
             const payload = {
                 id: document.getElementById('form-no-kuitansi').value,
                 customer: document.getElementById('form-customer-name').value,
@@ -650,7 +949,9 @@
                 date: cleanDateString(document.getElementById('form-date').value), 
                 phone: document.getElementById('form-phone').value,
                 payment: document.getElementById('form-payment').value,
-                signer: document.getElementById('form-signer').value,
+                signer: signer,
+                useTTD: useTTD,
+                ttdUrl: ttdUrl,
                 receiverName: document.getElementById('form-receiver-name').value,
                 note: document.getElementById('form-note').value,
                 total: grandTotal,
@@ -667,17 +968,21 @@
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify(payload)
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload),
+                    redirect: 'follow'
                 });
                 const result = await response.json();
                 if (result.status === "success") {
                     closeModal();
                     await syncData(); 
                     showToast(payload.id, "Berhasil Tersimpan");
+                } else {
+                    saveToLocalAndRefresh(payload);
                 }
             } catch (err) {
-                console.error(err);
-                showCustomToastModal("Gagal Menyimpan", "Gagal menyimpan data kuitansi ke Cloud database.", "⚠️");
+                console.warn("Simpan Cloud gagal, menyimpan ke lokal:", err);
+                saveToLocalAndRefresh(payload);
             } finally {
                 toggleLoading(false);
             }
@@ -873,6 +1178,12 @@
             document.getElementById('form-phone').value = r.phone || '';
             document.getElementById('form-payment').value = r.payment;
             document.getElementById('form-signer').value = r.signer;
+            
+            // Set useTTD Checkbox
+            const isTTDActive = r.useTTD === true || r.useTTD === "true" || r.useTTD === "Ya" || r.useTTD == 1;
+            document.getElementById('form-use-ttd').checked = isTTDActive;
+            updateTTDFormState();
+
             document.getElementById('form-receiver-name').value = r.receiverName || '';
             document.getElementById('form-note').value = r.note || '';
             
@@ -900,7 +1211,24 @@
             const formattedDate = formatDisplayDateFull(now.toISOString().split('T')[0]);
             const printDateTime = `${formattedDate}, ${formattedTime} WIB`;
 
-            // Cetak Baris Item dengan Kolom Satuan Ditampilkan
+            // Hitung URL TTD untuk penandatangan kuitansi
+            const fauziUrl = ttdSettings.fauziUrl || document.getElementById('ttd-url-fauzi')?.value.trim() || localStorage.getItem('fami_ttd_fauzi') || "";
+            const yelmiUrl = ttdSettings.yelmiUrl || document.getElementById('ttd-url-yelmi')?.value.trim() || localStorage.getItem('fami_ttd_yelmi') || "";
+
+            const isTTDActive = d.useTTD === true || d.useTTD === "true" || d.useTTD === "Ya" || d.useTTD == 1;
+            
+            let ttdUrlToUse = d.ttdUrl;
+            if (!ttdUrlToUse) {
+                ttdUrlToUse = d.signer === 'Fauzi' ? fauziUrl : yelmiUrl;
+            }
+
+            let ttdImageHtml = "";
+            if ((isTTDActive || ttdUrlToUse) && ttdUrlToUse.length > 5) {
+                ttdImageHtml = `<div style="height: 65px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px;"><img src="${ttdUrlToUse}" style="max-height: 65px; max-width: 160px; object-fit: contain;" alt="TTD ${d.signer}" crossorigin="anonymous"></div>`;
+            } else {
+                ttdImageHtml = `<div style="height: 65px;"></div>`;
+            }
+
             const itemsHtml = d.items.map(it => `
                 <tr style="page-break-inside: avoid;">
                     <td style="border: 1.5px solid #000; padding: 8px 10px;">${it.desc}</td>
@@ -943,10 +1271,7 @@
                             justify-content: center;
                             align-items: center;
                         }
-                        .print-watermark img {
-                            width: 100%;
-                            height: auto;
-                        }
+                        .print-watermark img { width: 100%; height: auto; }
 
                         .barcode-container {
                             margin: 15px 0;
@@ -954,17 +1279,13 @@
                             position: relative;
                             z-index: 10;
                         }
-                        .barcode-img {
-                            height: 48px;
-                            width: auto;
-                            display: block;
-                        }
+                        .barcode-img { height: 48px; width: auto; display: block; }
 
-                        .footer-section { margin-top: 35px; display: flex; justify-content: space-between; page-break-inside: avoid; position: relative; z-index: 10; }
-                        .sig-block { text-align: center; width: 200px; }
-                        .sig-label { font-weight: 700; margin-bottom: 85px; font-size: 11px; }
-                        .sig-line { border-bottom: 1.5px solid #000; }
-                        .sig-name { font-weight: bold; font-size: 12px; margin-top: 6px; text-transform: uppercase; }
+                        .footer-section { margin-top: 20px; display: flex; justify-content: space-between; page-break-inside: avoid; position: relative; z-index: 10; }
+                        .sig-block { text-align: center; width: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+                        .sig-label { font-weight: 700; margin-bottom: 10px; font-size: 11px; width: 100%; text-align: center; }
+                        .sig-line { border-bottom: 1.5px solid #000; width: 100%; }
+                        .sig-name { font-weight: bold; font-size: 12px; margin-top: 6px; text-transform: uppercase; width: 100%; text-align: center; }
                         
                         .print-footer {
                             position: fixed;
@@ -1041,11 +1362,13 @@
                     <div class="footer-section">
                         <div class="sig-block">
                             <div class="sig-label">Tanda Terima</div>
+                            <div style="height: 65px;"></div>
                             <div class="sig-line"></div>
                             <div class="sig-name">${d.receiverName || d.customer}</div>
                         </div>
                         <div class="sig-block">
                             <div class="sig-label">Hormat Kami</div>
+                            ${ttdImageHtml}
                             <div class="sig-line"></div>
                             <div class="sig-name">${d.signer}</div>
                         </div>
@@ -1060,7 +1383,12 @@
                 </html>
             `);
             pw.document.close();
-            setTimeout(() => pw.print(), 500);
+            
+            // Jeda 1000ms untuk memastikan gambar TTD & Barcode selesai diunduh oleh browser sebelum cetak
+            setTimeout(() => {
+                pw.focus();
+                pw.print();
+            }, 1000);
         }
     </script>
 </body>
