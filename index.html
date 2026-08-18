@@ -22,6 +22,12 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        /* Memaksa skema warna terang untuk form & popup */
+        html, body, input, select, option {
+            color-scheme: light !important;
+        }
+
         body { 
             font-family: 'Inter', sans-serif; 
             overscroll-behavior-y: contain;
@@ -48,6 +54,33 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Custom Blue Theme for Item Input Fields */
+        .item-desc, .item-unit {
+            background-color: #eff6ff !important; /* Soft Blue Input */
+            border-color: #bfdbfe !important;
+            color: #1e3a8a !important;
+        }
+        .item-desc:focus, .item-unit:focus {
+            background-color: #ffffff !important;
+            border-color: #2563eb !important;
+        }
+        
+        /* Styling Dropdown Option Satuan Warna Biru */
+        .item-unit option, select option {
+            background-color: #1d4ed8 !important; /* Biru Fami */
+            color: #ffffff !important;            /* Teks Putih */
+            font-weight: 700;
+            padding: 10px;
+        }
+
+        /* Dropdown Autocomplete Kustom (Warna Latar Belakang Biru Pekat & Terang) */
+        .custom-autocomplete-dropdown {
+            background-color: #1d4ed8 !important; /* Latar Belakang Biru Fami */
+            border: 2px solid #60a5fa !important;  /* Tepi Biru Terang */
+            border-radius: 1rem !important;
+            box-shadow: 0 20px 25px -5px rgba(29, 78, 216, 0.4), 0 8px 10px -6px rgba(29, 78, 216, 0.3) !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen text-gray-900 overflow-hidden select-none">
@@ -55,12 +88,10 @@
     <!-- Loading Overlay with Integrated Logo inside rotating ring -->
     <div id="loading-overlay" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[200] flex flex-col items-center justify-center hidden">
         <div class="relative flex items-center justify-center mb-4">
-            <!-- Rotating loader ring -->
             <div class="loader"></div>
-            <!-- Centered Stationary Logo inside rotating ring -->
             <img src="https://iili.io/CjM3XgR.png" onerror="this.onerror=null; this.src='https://iili.io/CjM3XgR.th.png';" class="absolute w-12 h-12 object-contain p-1 rounded-full bg-white/90 shadow-sm" alt="Sync Logo">
         </div>
-        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">Menghubungkan ke Cloud...</p>
+        <p id="loading-text" class="font-bold text-blue-600 animate-pulse text-lg">..Memuat Aplikasi..</p>
     </div>
 
     <!-- Login Page -->
@@ -122,6 +153,10 @@
                     <span class="mr-3 text-xl text-white">✍️</span> 
                     <span class="font-medium text-white">TTD</span>
                 </button>
+                <a href="https://www.famicollection.my.id" target="_blank" rel="noopener noreferrer" id="nav-website" class="w-full flex items-center py-4 px-8 hover:bg-blue-600 transition-all duration-200 text-white">
+                    <span class="mr-3 text-xl text-white">🌐</span> 
+                    <span class="font-medium text-white">Fami Collection</span>
+                </a>
             </nav>
             <div class="p-4 border-t border-blue-600">
                 <button onclick="logout()" class="w-full flex items-center py-3 px-6 rounded-xl hover:bg-red-600/20 text-blue-200 hover:text-red-400 transition-all font-bold text-sm">
@@ -139,7 +174,7 @@
                 <div class="flex items-center space-x-4">
                     <h2 id="page-title" class="text-2xl font-bold text-gray-800">Beranda</h2>
                     <button onclick="syncData()" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Refresh Data Cloud">🔄</button>
-                    <!-- Tombol Database -->
+                    <!-- Tombol Database Google Sheets -->
                     <button onclick="window.open('https://docs.google.com/spreadsheets/d/1lnw1srOmzmx4VSPGyigIFZ3Ri7TXrGkJ0PjKr2SO0SQ/edit?usp=sharing', '_blank')" class="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg shadow-green-100 transition transform active:scale-95" title="Buka Database Google Sheet">
                         <span class="text-white">📊</span>
                         <span class="text-white font-bold">Database</span>
@@ -156,7 +191,7 @@
                 <div id="page-beranda" class="space-y-6 animate-in fade-in duration-500 text-gray-900">
                     <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-10 rounded-3xl shadow-lg text-white">
                         <h1 class="text-4xl font-black mb-2 text-white">Halo, Selamat Datang!</h1>
-                        <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Kuitansi Digital Fami Collection.</p>
+                        <p class="text-blue-100 text-lg opacity-90 text-white/90">Aplikasi Fami Collection.</p>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-900">
@@ -228,17 +263,16 @@
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Cari No. Kuitansi</label>
                                 <div class="relative text-gray-900">
                                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">🔍</span>
-                                    <input type="text" id="filter-id" oninput="resetToPageOneAndRender()" placeholder="FM-0001-2026" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                                    <input type="text" id="filter-id" oninput="resetToPageOneAndRender()" placeholder="FM-0001" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
                                 </div>
                             </div>
                             <div class="space-y-1 text-gray-900">
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Cari Nama Pelanggan</label>
                                 <div class="relative text-gray-900">
                                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">👤</span>
-                                    <input type="text" id="filter-customer" oninput="resetToPageOneAndRender()" placeholder="Contoh: SDN 22 Tanah Keras" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
+                                    <input type="text" id="filter-customer" oninput="resetToPageOneAndRender()" placeholder="Contoh: Fauzi" class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-10 pr-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
                                 </div>
                             </div>
-                            <!-- Pilihan Batas Baris Data (Dropdown Limit) -->
                             <div class="space-y-1 text-gray-900">
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Baris Per Halaman</label>
                                 <select id="filter-limit" onchange="changeLimit()" class="w-full bg-white border border-gray-200 rounded-2xl py-3 px-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition-all font-medium text-gray-900 shadow-sm">
@@ -256,7 +290,7 @@
                         </button>
                     </div>
 
-                    <!-- Receipt Table with Integrated Pagination -->
+                    <!-- Receipt Table -->
                     <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-gray-100 text-gray-900">
                         <table class="w-full text-left border-collapse text-gray-900">
                             <thead>
@@ -297,7 +331,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- TTD Fauzi Card -->
                         <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6 flex flex-col justify-between">
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-3">
@@ -319,7 +352,6 @@
                             </div>
                         </div>
 
-                        <!-- TTD Yelmi Putri Card -->
                         <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6 flex flex-col justify-between">
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-3">
@@ -359,7 +391,7 @@
             <div class="p-8 border-b sticky top-0 bg-white/90 backdrop-blur-md z-10 flex justify-between items-center rounded-t-3xl text-gray-900">
                 <div>
                     <h2 id="modal-title" class="text-3xl font-black text-gray-800">Buat Kuitansi Baru</h2>
-                    <p class="text-gray-500 text-sm">Lengkapi detail transaksi untuk disimpan.</p>
+                    <p class="text-gray-500 text-sm">Lengkapi detail transaksi untuk disimpan</p>
                 </div>
                 <button onclick="closeModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all text-3xl font-light">&times;</button>
             </div>
@@ -434,7 +466,7 @@
                         <h3 class="text-xl font-bold text-gray-800">Detail Pesanan</h3>
                         <button type="button" onclick="addItemRow()" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-xl font-bold text-sm transition shadow-lg shadow-green-100 transform active:scale-95">+ Tambah Baris</button>
                     </div>
-                    <div class="overflow-x-auto rounded-2xl border border-gray-100 bg-gray-50/30">
+                    <div class="overflow-x-visible rounded-2xl border border-gray-100 bg-gray-50/30 p-2">
                         <table class="w-full min-w-[850px]">
                             <thead class="text-gray-400 text-xs uppercase font-black">
                                 <tr>
@@ -471,13 +503,13 @@
 
                 <div class="flex justify-end space-x-4 pt-4">
                     <button type="button" onclick="closeModal()" class="px-10 py-4 rounded-2xl border-2 border-gray-100 text-gray-400 hover:bg-gray-50 font-bold transition">Batal</button>
-                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase">Simpan Data</button>
+                    <button type="submit" class="px-12 py-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 font-black shadow-2xl shadow-blue-300 transition transform hover:-translate-y-1 uppercase">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Custom Notification Box (Anti-alert Dialog) -->
+    <!-- Custom Notification Box -->
     <div id="toast-modal" class="fixed inset-0 bg-gray-950/50 backdrop-blur-sm z-[600] flex items-center justify-center hidden p-4 no-print">
         <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-8 text-center space-y-4">
             <div id="toast-modal-icon" class="text-4xl">⚠️</div>
@@ -519,14 +551,13 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
         // Web Manifest Dynamic Generator
         (function() {
             const myManifest = {
                 "name": "Fami Collection - Sistem Kuitansi Digital",
                 "short_name": "Fami Receipt",
-                "description": "Sistem Aplikasi Manajemen Kuitansi Cloud Fami Collection",
+                "description": "Sistem Aplikasi Manajemen Kuitansi Digital Fami Collection",
                 "start_url": window.location.href,
                 "display": "standalone",
                 "background_color": "#1d4ed8",
@@ -572,9 +603,25 @@
             "Meter", "Centimeter", "Kodi", "Batang", "Rol", "Unit", "Lembar", "Botol"
         ];
 
+        // Daftar Pilihan Preset Deskripsi Produk / Jasa Fami Collection
+        const PRESET_ITEMS = [
+            "Pulpen", "Buku Administrasi Guru", "Pena My Gel", "Pena Joyko", "Pena Pilot", "Pena Standart", 
+            "Pensil", "Spidol", "Stabilo", "Penghapus", "Penghapus Papan Tulis", "Rautan", "Pensil warna", 
+            "Pulpen gel", "Lem Kertas Glue Besar", "Lem Kertas Glue Kecil", "Lem Kertas", "Lem FOX", "Map Gobi", 
+            "Buku tulis", "Kertas HVS A4", "Kertas HVS F4", "Sticky notes", "Amplop Besar", "Amplop Kecil", 
+            "Map folder", "Binder", "Kertas folio", "Kertas label", "Stapler", "Isi staples", "Paper clip", 
+            "Binder clip", "Punch hole (pelubang kertas)", "Penjepit dokumen besar", "Map expanding file", 
+            "Gunting", "Cutter", "Double tape", "Lakban", "Lem stik", "Isolasi transparan", "Tempat pensil", 
+            "Organizer meja", "Kalender meja", "Penggaris", "Jam meja", "Tempat dokumen", "Rak arsip mini", 
+            "Label sticker", "Mesin laminating", "Mesin penghancur kertas", "Whiteboard & marker", 
+            "Papan pengumuman", "Tinta printer", "Kertas foto", "Clipboard", "Sticky flags", 
+            "Correction tape (tip-ex)", "Correction fluid", "Buku agenda", "Buku Nota", "Buku kwitansi"
+        ];
+
         function cleanDateString(dateStr) {
             if (!dateStr) return "";
-            let s = String(dateStr);
+            let s = String(dateStr).trim();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
             if (s.includes('T')) return s.split('T')[0];
             let clean = s.replace(/GM$/, 'GMT').replace(/^[A-Za-z]{3}\s/, '');
             let d = new Date(clean);
@@ -649,7 +696,7 @@
         }
 
         async function syncData() {
-            toggleLoading(true, "..Memuat Data...");
+            toggleLoading(true, "..Memuat Data..");
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'GET',
@@ -667,9 +714,6 @@
                     document.getElementById('ttd-url-yelmi').value = ttdSettings.yelmiUrl || "";
                     previewTTDFauzi();
                     previewTTDYelmi();
-                    localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
-                    localStorage.setItem('fami_ttd_fauzi', ttdSettings.fauziUrl || "");
-                    localStorage.setItem('fami_ttd_yelmi', ttdSettings.yelmiUrl || "");
                 }
 
                 const receiptData = Array.isArray(data) ? data : (data?.receipts || []);
@@ -679,7 +723,6 @@
                         ...r,
                         date: cleanDateString(r.date)
                     }));
-                    localStorage.setItem('fami_receipts_cache', JSON.stringify(receipts));
                 } else {
                     receipts = [];
                 }
@@ -695,56 +738,23 @@
                 renderList();
                 buildRevenueChart();
             } catch (err) {
-                console.warn("Sinkronisasi Cloud offline / gagal dijangkau:", err.message || err);
-                
-                // FALLBACK TO LOCALSTORAGE JIKA FETCH GAGAL
-                const localReceipts = localStorage.getItem('fami_receipts_cache');
-                const localTTD = localStorage.getItem('fami_ttd_settings');
-                
-                if (localTTD) {
-                    try {
-                        const parsedTTD = JSON.parse(localTTD);
-                        ttdSettings.fauziUrl = parsedTTD.fauziUrl || localStorage.getItem('fami_ttd_fauzi') || "";
-                        ttdSettings.yelmiUrl = parsedTTD.yelmiUrl || localStorage.getItem('fami_ttd_yelmi') || "";
-                        document.getElementById('ttd-url-fauzi').value = ttdSettings.fauziUrl;
-                        document.getElementById('ttd-url-yelmi').value = ttdSettings.yelmiUrl;
-                        previewTTDFauzi();
-                        previewTTDYelmi();
-                    } catch(e) {}
-                }
-                
-                if (localReceipts) {
-                    try {
-                        receipts = JSON.parse(localReceipts);
-                    } catch(e) {
-                        receipts = [];
-                    }
-                } else {
-                    receipts = [];
-                }
-                
-                receipts.sort((a, b) => a.id.localeCompare(b.id));
-                if (receipts.length > 0) {
-                    const lastId = [...receipts].sort((a, b) => b.id.localeCompare(a.id))[0].id;
-                    const match = lastId.match(/FM-(\d+)-/);
-                    if (match) nextSequence = parseInt(match[1]) + 1;
-                }
-                
+                console.warn("Sinkronisasi Cloud gagal dijangkau:", err.message || err);
+                receipts = [];
                 initApp();
                 renderList();
                 buildRevenueChart();
                 
                 showCustomToastModal(
-                    "Mode Offline / Lokal Aktif", 
-                    "Sistem berjalan dalam mode penyimpanan lokal (Offline Cache).\n\nJika ingin terhubung ke Google Sheet:\n1. Buka Google Apps Script Anda.\n2. Klik <b>Deploy</b> &rarr; <b>Manage deployments</b>.\n3. Pastikan <b>Who has access</b> diset ke <b>Anyone (Siapa Saja)</b>.", 
-                    "ℹ️"
+                    "Gagal Terhubung ke Cloud", 
+                    "Tidak dapat terhubung ke Google Sheets.\n\nSilakan periksa:\n1. Koneksi internet Anda.\n2. Akses Google Apps Script (Deploy -> Who has access: Anyone).", 
+                    "⚠️"
                 );
             } finally {
                 toggleLoading(false);
             }
         }
 
-        function toggleLoading(show, text = "Menghubungkan ke Database...") {
+        function toggleLoading(show, text = "Menghubungkan ke Cloud...") {
             document.getElementById('loading-text').innerText = text;
             document.getElementById('loading-overlay').classList.toggle('hidden', !show);
         }
@@ -772,8 +782,6 @@
         function previewTTDFauzi() {
             const url = document.getElementById('ttd-url-fauzi').value.trim();
             ttdSettings.fauziUrl = url;
-            localStorage.setItem('fami_ttd_fauzi', url);
-            localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
             
             const img = document.getElementById('img-preview-fauzi');
             const txt = document.getElementById('txt-preview-fauzi');
@@ -791,8 +799,6 @@
         function previewTTDYelmi() {
             const url = document.getElementById('ttd-url-yelmi').value.trim();
             ttdSettings.yelmiUrl = url;
-            localStorage.setItem('fami_ttd_yelmi', url);
-            localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
 
             const img = document.getElementById('img-preview-yelmi');
             const txt = document.getElementById('txt-preview-yelmi');
@@ -813,9 +819,6 @@
 
             ttdSettings.fauziUrl = fauzi;
             ttdSettings.yelmiUrl = yelmi;
-            localStorage.setItem('fami_ttd_fauzi', fauzi);
-            localStorage.setItem('fami_ttd_yelmi', yelmi);
-            localStorage.setItem('fami_ttd_settings', JSON.stringify(ttdSettings));
 
             toggleLoading(true, "Menyimpan TTD...");
             try {
@@ -833,11 +836,11 @@
                 if (res.status === "success") {
                     showCustomToastModal("Berhasil", "Pengaturan TTD Elektronik berhasil disimpan!", "✅");
                 } else {
-                    showCustomToastModal("Tersimpan Lokal", "TTD tersimpan di browser Anda (Local Storage).", "ℹ️");
+                    showCustomToastModal("Gagal Menyimpan", "Pengaturan TTD gagal disimpan.", "⚠️");
                 }
             } catch (err) {
                 console.warn("Gagal menyimpan TTD ke Cloud:", err);
-                showCustomToastModal("Tersimpan Lokal", "TTD tersimpan di browser Anda. (Koneksi Cloud Offline)", "ℹ️");
+                showCustomToastModal("Gagal Menyimpan", "Koneksi ke Google Sheets terputus.", "⚠️");
             } finally {
                 toggleLoading(false);
             }
@@ -849,8 +852,8 @@
             const box = document.getElementById('ttd-preview-box');
             const thumb = document.getElementById('ttd-preview-thumb');
 
-            const fauzi = document.getElementById('ttd-url-fauzi')?.value.trim() || ttdSettings.fauziUrl || localStorage.getItem('fami_ttd_fauzi') || "";
-            const yelmi = document.getElementById('ttd-url-yelmi')?.value.trim() || ttdSettings.yelmiUrl || localStorage.getItem('fami_ttd_yelmi') || "";
+            const fauzi = document.getElementById('ttd-url-fauzi')?.value.trim() || ttdSettings.fauziUrl || "";
+            const yelmi = document.getElementById('ttd-url-yelmi')?.value.trim() || ttdSettings.yelmiUrl || "";
 
             if (useTTD) {
                 const url = signer === 'Fauzi' ? fauzi : yelmi;
@@ -887,24 +890,75 @@
 
         function addItemRow(desc = '', qty = 1, unit = 'Pcs', price = 0) {
             const tr = document.createElement('tr');
-            tr.className = "group hover:bg-white transition-colors text-gray-900";
+            tr.className = "group hover:bg-blue-50/30 transition-colors text-gray-900";
             
-            const unitOptionsHtml = LIST_SATUAN.map(u => `<option value="${u}" ${u === unit ? 'selected' : ''}>${u}</option>`).join('');
+            const unitOptionsHtml = LIST_SATUAN.map(u => `<option value="${u}" class="bg-blue-700 text-white font-bold" ${u === unit ? 'selected' : ''}>${u}</option>`).join('');
 
             tr.innerHTML = `
-                <td class="p-4"><input type="text" value="${desc}" placeholder="Deskripsi item" class="item-desc w-full border rounded-xl p-3 font-medium text-gray-900" required></td>
-                <td class="p-4 w-24"><input type="number" value="${qty}" min="1" class="item-qty w-full border rounded-xl p-3 text-center font-bold text-gray-900" oninput="calculate()"></td>
+                <td class="p-4 relative">
+                    <input type="text" value="${desc}" placeholder="Cari atau ketik deskripsi item..." class="item-desc w-full bg-blue-50 border border-blue-200 rounded-xl p-3 font-semibold text-blue-900 placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all" required autocomplete="off">
+                    <div class="custom-autocomplete-dropdown hidden absolute left-4 right-4 top-full z-[150] bg-blue-700 border-2 border-blue-400 rounded-2xl shadow-2xl max-h-56 overflow-y-auto mt-1 p-1"></div>
+                </td>
+                <td class="p-4 w-24"><input type="number" value="${qty}" min="1" class="item-qty w-full border border-gray-200 rounded-xl p-3 text-center font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500" oninput="calculate()"></td>
                 <td class="p-4 w-36">
-                    <select class="item-unit w-full border rounded-xl p-3 text-center font-medium text-gray-900 bg-white focus:outline-none focus:border-blue-500">
+                    <select class="item-unit w-full bg-blue-50 border border-blue-200 rounded-xl p-3 text-center font-semibold text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all">
                         ${unitOptionsHtml}
                     </select>
                 </td>
-                <td class="p-4 w-48"><input type="number" value="${price}" placeholder="0" class="item-price w-full border rounded-xl p-3 text-right font-bold text-gray-900" oninput="calculate()"></td>
+                <td class="p-4 w-48"><input type="number" value="${price}" placeholder="0" class="item-price w-full border border-gray-200 rounded-xl p-3 text-right font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500" oninput="calculate()"></td>
                 <td class="p-4 text-right font-black text-blue-700 item-total">Rp 0</td>
                 <td class="p-4 text-center"><button type="button" onclick="this.closest('tr').remove(); calculate()" class="text-red-400 text-2xl hover:text-red-600 transition">&times;</button></td>
             `;
+
+            const descInput = tr.querySelector('.item-desc');
+            const dropdown = tr.querySelector('.custom-autocomplete-dropdown');
+
+            // Setup Custom Autocomplete Handler
+            setupCustomAutocomplete(descInput, dropdown);
+
             document.getElementById('item-rows').appendChild(tr);
             calculate();
+        }
+
+        // Fungsi Autocomplete Biru Pekat
+        function setupCustomAutocomplete(inputEl, dropdownEl) {
+            function renderDropdown(filterText = "") {
+                const query = filterText.toLowerCase().trim();
+                const matches = PRESET_ITEMS.filter(item => item.toLowerCase().includes(query));
+
+                if (matches.length === 0) {
+                    dropdownEl.classList.add('hidden');
+                    return;
+                }
+
+                dropdownEl.innerHTML = matches.map(item => 
+                    `<div class="custom-autocomplete-item px-4 py-2.5 text-white font-bold text-xs hover:bg-blue-500 rounded-xl cursor-pointer transition-all border-b border-blue-600/50 last:border-none flex items-center justify-between">
+                        <span>${item}</span>
+                        <span class="text-[10px] opacity-80 bg-blue-900 px-2 py-0.5 rounded-md font-extrabold text-blue-100">Pilih</span>
+                    </div>`
+                ).join('');
+                dropdownEl.classList.remove('hidden');
+
+                dropdownEl.querySelectorAll('.custom-autocomplete-item').forEach(itemDiv => {
+                    itemDiv.onmousedown = function(e) {
+                        e.preventDefault(); 
+                        inputEl.value = this.querySelector('span').innerText;
+                        dropdownEl.classList.add('hidden');
+                    };
+                });
+            }
+
+            inputEl.onfocus = function() {
+                renderDropdown(this.value);
+            };
+
+            inputEl.oninput = function() {
+                renderDropdown(this.value);
+            };
+
+            inputEl.onblur = function() {
+                setTimeout(() => dropdownEl.classList.add('hidden'), 150);
+            };
         }
 
         function calculate() {
@@ -933,29 +987,14 @@
             return subtotal;
         }
 
-        function saveToLocalAndRefresh(payload) {
-            const existingIdx = receipts.findIndex(r => r.id === payload.id);
-            if (existingIdx >= 0) {
-                receipts[existingIdx] = payload;
-            } else {
-                receipts.push(payload);
-            }
-            localStorage.setItem('fami_receipts_cache', JSON.stringify(receipts));
-            closeModal();
-            initApp();
-            renderList();
-            buildRevenueChart();
-            showToast(payload.id, "Tersimpan Lokal");
-        }
-
         document.getElementById('receipt-form').onsubmit = async function(e) {
             e.preventDefault();
             const grandTotal = calculate();
             const signer = document.getElementById('form-signer').value;
             const useTTD = document.getElementById('form-use-ttd').checked;
             
-            const fauzi = document.getElementById('ttd-url-fauzi')?.value.trim() || ttdSettings.fauziUrl || localStorage.getItem('fami_ttd_fauzi') || "";
-            const yelmi = document.getElementById('ttd-url-yelmi')?.value.trim() || ttdSettings.yelmiUrl || localStorage.getItem('fami_ttd_yelmi') || "";
+            const fauzi = document.getElementById('ttd-url-fauzi')?.value.trim() || ttdSettings.fauziUrl || "";
+            const yelmi = document.getElementById('ttd-url-yelmi')?.value.trim() || ttdSettings.yelmiUrl || "";
             const ttdUrl = useTTD ? (signer === 'Fauzi' ? fauzi : yelmi) : "";
 
             const payload = {
@@ -980,7 +1019,7 @@
                 }))
             };
 
-            toggleLoading(true, "Menyimpan...");
+            toggleLoading(true, "Menyimpan Data...");
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -994,11 +1033,11 @@
                     await syncData(); 
                     showToast(payload.id, "Berhasil Tersimpan");
                 } else {
-                    saveToLocalAndRefresh(payload);
+                    showCustomToastModal("Gagal Menyimpan", result.message || "Gagal menyimpan data.", "⚠️");
                 }
             } catch (err) {
-                console.warn("Simpan Cloud gagal, menyimpan ke lokal:", err);
-                saveToLocalAndRefresh(payload);
+                console.warn("Simpan Cloud gagal:", err);
+                showCustomToastModal("Gagal Terhubung", "Gagal menghubungkan ke Google Sheets. Pastikan internet Anda aktif.", "⚠️");
             } finally {
                 toggleLoading(false);
             }
@@ -1095,12 +1134,11 @@
             });
         }
 
-        // Fungsi Modal & Aksi Hapus
         function openDeleteModal(idx) {
             deleteTargetIdx = idx;
             const r = receipts[idx];
             if (!r) return;
-            document.getElementById('delete-modal-text').innerText = `Kuitansi ${r.id} atas nama "${r.customer}" akan dihapus permanen.`;
+            document.getElementById('delete-modal-text').innerText = `Kuitansi ${r.id} atas nama "${r.customer}" akan dihapus permanen dari Google Sheets.`;
             document.getElementById('delete-modal').classList.remove('hidden');
         }
 
@@ -1115,7 +1153,7 @@
             closeDeleteModal();
             if (!r) return;
 
-            toggleLoading(true, "Menghapus Kuitansi dari Database...");
+            toggleLoading(true, "Menghapus Kuitansi...");
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -1242,7 +1280,6 @@
             document.getElementById('form-payment').value = r.payment;
             document.getElementById('form-signer').value = r.signer;
             
-            // Set useTTD Checkbox
             const isTTDActive = r.useTTD === true || r.useTTD === "true" || r.useTTD === "Ya" || r.useTTD == 1;
             document.getElementById('form-use-ttd').checked = isTTDActive;
             updateTTDFormState();
@@ -1274,9 +1311,8 @@
             const formattedDate = formatDisplayDateFull(now.toISOString().split('T')[0]);
             const printDateTime = `${formattedDate}, ${formattedTime} WIB`;
 
-            // Hitung URL TTD untuk penandatangan kuitansi
-            const fauziUrl = ttdSettings.fauziUrl || document.getElementById('ttd-url-fauzi')?.value.trim() || localStorage.getItem('fami_ttd_fauzi') || "";
-            const yelmiUrl = ttdSettings.yelmiUrl || document.getElementById('ttd-url-yelmi')?.value.trim() || localStorage.getItem('fami_ttd_yelmi') || "";
+            const fauziUrl = ttdSettings.fauziUrl || document.getElementById('ttd-url-fauzi')?.value.trim() || "";
+            const yelmiUrl = ttdSettings.yelmiUrl || document.getElementById('ttd-url-yelmi')?.value.trim() || "";
 
             const isTTDActive = d.useTTD === true || d.useTTD === "true" || d.useTTD === "Ya" || d.useTTD == 1;
             
@@ -1286,7 +1322,6 @@
             }
 
             let ttdImageHtml = "";
-            // Hanya tampilkan gambar TTD jika sakelar Aktifkan TTD Elektronik bernilai AKTIF
             if (isTTDActive && ttdUrlToUse && ttdUrlToUse.trim().length > 5) {
                 ttdImageHtml = `<div style="height: 65px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px;"><img src="${ttdUrlToUse}" style="max-height: 65px; max-width: 160px; object-fit: contain;" alt="TTD ${d.signer}" crossorigin="anonymous"></div>`;
             } else {
@@ -1448,7 +1483,6 @@
             `);
             pw.document.close();
             
-            // Jeda 1000ms untuk memastikan gambar TTD & Barcode selesai diunduh oleh browser sebelum cetak
             setTimeout(() => {
                 pw.focus();
                 pw.print();
